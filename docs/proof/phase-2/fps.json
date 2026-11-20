@@ -1,0 +1,73 @@
+{
+  "night1": {
+    "viewport": "1280x720",
+    "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009A78) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "samples": [
+      53,
+      57,
+      58,
+      60,
+      60,
+      54,
+      38,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ],
+    "avg_fps": 57.5,
+    "pass": true
+  },
+  "night2": {
+    "viewport": "1280x720",
+    "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009A78) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "samples": [
+      55,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ],
+    "avg_fps": 60,
+    "pass": true
+  },
+  "night3": {
+    "viewport": "1280x720",
+    "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009A78) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "samples": [
+      47,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      45,
+      60,
+      60
+    ],
+    "avg_fps": 58.7,
+    "pass": true
+  },
+  "machine": {
+    "cpu": "11th Gen Intel(R) Core(TM) i3-1125G4 @ 2.00GHz",
+    "os": "Windows_NT 10.0.26200",
+    "browser": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
+  }
+}

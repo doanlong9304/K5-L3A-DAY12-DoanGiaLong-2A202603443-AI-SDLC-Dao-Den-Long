@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 1200 --out docs/proof/phase-2/runs/no_drifters_night1/out.jsonl --scenario docs/proof/phase-2/runs/no_drifters_night1/scenario.json --snapshot-every 1200

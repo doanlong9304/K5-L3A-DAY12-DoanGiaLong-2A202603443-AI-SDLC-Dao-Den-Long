@@ -1,0 +1,65 @@
+{
+  "browser": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "checks": [
+    {
+      "name": "menu shown at start",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "night intro shows island name + Ong Dang line",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "playing: HUD timer mm:ss running",
+      "pass": true,
+      "detail": "04:58"
+    },
+    {
+      "name": "HUD: 10-cell mote bar",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "HUD: lanterns k/n + score top-right",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Esc opens pause menu",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "pause stops logic (timer frozen 2 s)",
+      "pass": true,
+      "detail": "04:58 -> 04:58"
+    },
+    {
+      "name": "pause menu has resume/restart/settings/menu",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "settings back returns to pause",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "P resumes play",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "settings persisted across reload",
+      "pass": true,
+      "detail": "{\"volume\":0.25,\"sensitivity\":0.7}"
+    },
+    {
+      "name": "settings UI restored from storage",
+      "pass": true,
+      "detail": ""
+    }
+  ]
+}

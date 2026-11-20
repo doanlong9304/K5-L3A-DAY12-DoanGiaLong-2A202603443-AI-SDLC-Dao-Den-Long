@@ -1,14 +1,16 @@
-# Retro
+# Đánh giá từng phase và retro
 
-## Đánh giá từng phase
-- Phase 1:
-- Phase 2:
-- Phase 3:
-- Phase 4:
+## Phase 1 (tag `phase-1`)
+- **Đạt:** mọi yêu cầu PRD-0 và Contract v1.0 có scenario headless; tất định; chơi được từ đầu tới thắng/thua (bot thắng 9/10 seed); HUD, ảnh "đảo sáng dần".
+- **Chưa kiểm chứng:** chơi lại bằng phím R và xoay camera bằng chuột (chưa chơi tay).
+- **Cần chỉnh:** test tất định ban đầu quá yếu (chỉ 11 s) nên đã gia cố. Bài học: luôn kiểm tra xem test có thực sự chạy qua cơ chế cần chứng minh hay không.
+
+## Phase 2 (tag `phase-2`)
+- **Đạt:** số chuẩn và contract v1.1; thứ tự 12 bước; 3 bản đồ; Gió Lạc, Bùa Gió, tạm dừng, lướt, rơi; 44 scenario mới; hồi quy Phase 1 viết lại theo số chuẩn và đạt; một Đêm headless ~0.3 s (giới hạn 30 s); FPS 57–60 ở 1280×720; UI smoke 12/12 (menu, tạm dừng, cài đặt được lưu).
+- **Có hỏng phase trước không:** có, nhưng có chủ đích. Các luật Phase 1 bị số chuẩn thay thế, nên test Phase 1 được sửa hoặc bỏ có ghi lý do (bảng trong [TRACE Phase 2](../proof/phase-2/TRACE.md)). Không có test bị tắt âm thầm.
+- **Chưa đạt / chưa kiểm chứng:** âm thanh (chỉ có trong code); chuỗi kết quả → Đêm kế tiếp → Bình Minh (chưa chơi thắng cả 3 Đêm); bot chưa thắng được Đêm 2–3.
+- **Rủi ro test ẩn:** các giả định P2-1 (điểm xuất phát Đêm 3), P2-4 (thời gian `spawning`), P2-12 (`invuln` là boolean) có thể khác ý giảng viên. Nên hỏi trợ giảng; mỗi điểm sửa được trong 1–2 dòng.
+- **Cần chỉnh harness:** đã thêm vào AGENTS.md quy tắc "thêm scenario trước" và "phân biệt lỗi test và lỗi code theo thứ tự tick", vì lỗi test sai do thứ tự tick đã lặp lại 2 lần.
 
 ## Tổng kết dự án
-- Số liệu (yêu cầu đạt/chưa đạt, số test, token tổng):
-- Điều hiệu quả khi làm với AI:
-- Những lần AI sai và cách phát hiện:
-- Harness giúp nhiều nhất:
-- Nếu làm lại thì đổi gì:
+*(viết ở Phase 4)*

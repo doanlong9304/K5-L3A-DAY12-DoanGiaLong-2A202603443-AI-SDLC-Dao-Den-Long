@@ -25,3 +25,26 @@ Mỗi dòng: chỗ mơ hồ → giả định đã chọn → lý do. Các con s
 | 17 | Snapshot | Chỉ ở các tick chia hết cho `--snapshot-every` (kể cả tick kết thúc nếu chia hết). Có kèm mảng `motes` (khuyến nghị) | |
 | 18 | Mã thoát | Inputs/scenario không đọc được JSON hoặc sai kiểu/giá trị → 2. Thiếu tham số bắt buộc, `--night` khác 1, không đọc được file → 1 | |
 | 19 | `time_left_s` | Được kẹp ≥ 0 | |
+
+> **Cập nhật Phase 2:** Ticket-02 đặt số liệu chuẩn thay mọi con số tự chọn ở trên. Các giả định #2, #3, #6, #7, #8, #10, #11, #13, #14, #15 của Phase 1 **đã bị thay thế** bởi luật chuẩn (xem [docs/spec/phase-2.md](../spec/phase-2.md)). Đáng chú ý: vùng an toàn giờ chỉ ở đèn **đã sáng** (bán kính 6 m); đom đóm rơi **nằm lại** trên đất 480 tick; điểm đom đóm tính khi **nạp**, không tính khi nhặt; rơi khỏi đảo bị phạt (`fall_enabled: true`).
+
+## Phase 2 (Ticket-02 / Contract v1.1)
+
+| # | Chỗ ticket chưa quy định | Giả định | Lý do |
+|---|---|---|---|
+| P2-1 | Điểm xuất phát Đêm 3 | **(0, 0, −20)** trên tầng 0, hướng mặt +Z. (0,0,0) nằm trong tháp chuông | Cần hỏi lại trợ giảng; đổi bằng 1 dòng trong `maps.js` |
+| P2-2 | Quy ước góc | Điểm ở góc a, bán kính r là (r·cos a, y, r·sin a). Với quy ước này, các điểm 20°…160° của tầng 1 và hai dốc 30°/150° nằm ở nửa z > 0, đúng như ticket mô tả tầng 1 | Đổi dấu z sẽ đặt các điểm tầng 1 ra ngoài tầng 1 |
+| P2-3 | Tăng tốc "≤ 0.1 s" | Đạt tốc độ ngay trong 1 tick (0 s ≤ 0.1 s), dừng cũng tức thì | Đúng ràng buộc, tất định, giữ vị trí chính xác cho test |
+| P2-4 | Thời gian trạng thái `spawning` | 60 tick: đứng yên, không gây sát thương, vẫn bị Tỏa Sáng trúng | Ticket không nêu con số |
+| P2-5 | Tốc độ `wander` của Bóng Mực | 2 m/s, đi tới một điểm sinh đom đóm ngẫu nhiên (theo seed) | Ticket chỉ nêu tốc độ đuổi |
+| P2-6 | Bóng Mực và địa hình | Bay lơ lửng, tâm = mặt đất + 1.0 m; không bay ra biển mây (vật cản) và không vào tháp chuông; đẩy lùi dừng khi gặp vật cản | "dừng nếu gặp vật cản" |
+| P2-7 | Đẩy khỏi vùng an toàn | Đẩy ra ngoài với tốc độ (6 + 0.01)/30 m mỗi tick, nên trường hợp xa nhất (bóng ở ngay chân đèn) mất đúng 30 tick; trong lúc đó trạng thái giữ nguyên nhưng không gây sát thương | "trong tối đa 30 tick" |
+| P2-8 | Gió Lạc chạm khi Mây mang < 5 | Chạm vẫn cướp min(3, đang mang) nếu Mây mang > 0, kể cả khi Gió Lạc đang `idle` | Ticket mô tả luật chạm không kèm điều kiện trạng thái |
+| P2-9 | Điểm sương sinh Gió Lạc / hướng lượn | Dùng các điểm sinh Bóng Mực của Đêm; khi `idle` lượn tới một điểm sương ngẫu nhiên | Ticket nói "điểm sương ngẫu nhiên" |
+| P2-10 | Trần 30 đom đóm | Đếm tất cả đom đóm đang có (kể cả đom đóm rơi); "điểm trống" = điểm sinh chưa có đom đóm ngẫu nhiên | |
+| P2-11 | `night_start` | Ghi ở tick 1 (bước đầu tiên), là event đầu tiên; bước dựng scenario vẫn không phát event | v1.0: dựng scenario không phát event |
+| P2-12 | `player.invuln` trong snapshot | Boolean (đang bất tử hay không); số tick còn lại nhận qua `invuln_ticks` của scenario | Các trường số khác đều có hậu tố `_s` |
+| P2-13 | `ttl_s` của đom đóm ngẫu nhiên | `null` | Không có thời hạn |
+| P2-14 | Gió | Bắt đầu ở sim_tick 1800·k, hướng = số nguyên độ ngẫu nhiên theo seed, đẩy đúng 300 tick; cảnh báo 2 s trước chỉ là hiển thị | |
+| P2-15 | Lướt khi đang bay từ bục nhảy | Lướt tạm thay vận tốc ngang; hết lướt thì quay lại vận tốc phóng tới khi chạm đất | "vẫn được lướt" |
+| P2-16 | Tổng điểm khi chạy headless | Mỗi lần chạy headless là một Đêm; `score` là điểm của Đêm đó. Tổng các Đêm đã thắng chỉ có ở bản chơi (màn Bình Minh) | |

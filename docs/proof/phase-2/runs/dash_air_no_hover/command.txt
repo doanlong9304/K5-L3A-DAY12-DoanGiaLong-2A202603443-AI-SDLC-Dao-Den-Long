@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 30 --out docs/proof/phase-2/runs/dash_air_no_hover/out.jsonl --scenario docs/proof/phase-2/runs/dash_air_no_hover/scenario.json --inputs docs/proof/phase-2/runs/dash_air_no_hover/inputs.json --snapshot-every 1

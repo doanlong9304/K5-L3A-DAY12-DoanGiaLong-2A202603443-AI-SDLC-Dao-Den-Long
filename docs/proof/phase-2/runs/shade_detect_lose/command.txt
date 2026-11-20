@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 2 --out docs/proof/phase-2/runs/shade_detect_lose/out.jsonl --scenario docs/proof/phase-2/runs/shade_detect_lose/scenario.json --snapshot-every 1

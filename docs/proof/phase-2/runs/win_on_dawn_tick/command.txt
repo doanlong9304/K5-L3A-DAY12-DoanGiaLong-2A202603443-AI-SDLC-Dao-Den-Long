@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 5 --out docs/proof/phase-2/runs/win_on_dawn_tick/out.jsonl --scenario docs/proof/phase-2/runs/win_on_dawn_tick/scenario.json --inputs docs/proof/phase-2/runs/win_on_dawn_tick/inputs.json

@@ -199,6 +199,10 @@ function sync(map, list, create) {
 }
 
 const tmp = new THREE.Vector3();
+const pulseRing = new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 48), new THREE.MeshBasicMaterial({ color: PAL.moteGlow, transparent: true, opacity: 0, side: THREE.DoubleSide }));
+pulseRing.rotation.x = -Math.PI / 2;
+pulseRing.visible = false;
+scene.add(pulseRing);
 function render(dt) {
   const t = performance.now() / 1000, p = game.player;
   may.position.set(...p.pos);
@@ -255,7 +259,12 @@ function render(dt) {
   camera.position.set(p.pos[0] - fx * 10, camY + 6, p.pos[2] - fz * 10);
   camera.lookAt(p.pos[0], camY + 1.2, p.pos[2]);
 
-  if (pulseFx > 0) { pulseFx = Math.max(0, pulseFx - dt * 2.5); }
+  // creative: expanding light ring on pulse (visual only)
+  if (pulseFx > 0) pulseFx = Math.max(0, pulseFx - dt * 2.5);
+  pulseRing.visible = pulseFx > 0;
+  pulseRing.scale.setScalar(Math.max(0.01, T.pulse_radius * (1 - pulseFx)));
+  pulseRing.position.set(p.pos[0], p.pos[1] + 0.1, p.pos[2]);
+  pulseRing.material.opacity = pulseFx;
   hud(lit, total, dt);
   renderer.render(scene, camera);
 }

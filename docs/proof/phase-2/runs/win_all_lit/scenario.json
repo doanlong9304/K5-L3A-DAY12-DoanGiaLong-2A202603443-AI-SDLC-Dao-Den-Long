@@ -1,0 +1,43 @@
+{
+  "random_motes": false,
+  "random_shades": false,
+  "random_drifters": false,
+  "wind_enabled": false,
+  "motes": [],
+  "shades": [],
+  "drifters": [],
+  "charms": [],
+  "player": {
+    "carried": 10
+  },
+  "lanterns": [
+    {
+      "id": "L1",
+      "lit": true,
+      "deposited": 10
+    },
+    {
+      "id": "L2",
+      "lit": true,
+      "deposited": 10
+    },
+    {
+      "id": "L3",
+      "lit": true,
+      "deposited": 10
+    },
+    {
+      "id": "L4",
+      "lit": true,
+      "deposited": 10
+    },
+    {
+      "id": "L5",
+      "pos": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}
