@@ -5,17 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đảo Đèn Lồng</title>
     <style>
-      html, body { margin: 0; height: 100%; overflow: hidden; background: #120a24; font-family: system-ui, sans-serif; color: #ffe9c4; }
-      #hud { position: fixed; top: 12px; left: 12px; background: rgba(20, 10, 36, 0.7); padding: 10px 14px; border-radius: 10px; line-height: 1.6; font-size: 15px; }
-      #hud .lbl { color: #c9a8ff; display: inline-block; min-width: 150px; }
-      #help { position: fixed; bottom: 12px; left: 12px; font-size: 13px; color: #c9b8e8; background: rgba(20, 10, 36, 0.6); padding: 6px 10px; border-radius: 8px; }
-      #toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); font-size: 18px; color: #ffd27a; opacity: 0; text-shadow: 0 0 8px #000; }
-      #overlay { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: rgba(18, 10, 36, 0.8); text-align: center; }
-      #overlay h1 { color: #ffb347; font-size: 40px; margin: 0 0 8px; }
+      :root { --sky: #0e1430; --fog: #1b2350; --lamp: #ffb347; --core: #ffe9b0; --gold: #f2c14e; --danger: #ff5a5f; --text: #f5f1e6; --scarf: #c8102e; }
+      html, body { margin: 0; height: 100%; overflow: hidden; background: var(--sky); font-family: system-ui, "Segoe UI", sans-serif; color: var(--text); user-select: none; }
+      .hud { position: fixed; pointer-events: none; text-shadow: 0 1px 4px #000; }
+      #flames { top: 14px; left: 16px; font-size: 26px; letter-spacing: 4px; }
+      #timer { top: 12px; left: 50%; transform: translateX(-50%); font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
+      #timer.low { color: var(--danger); animation: blink 0.6s steps(2) infinite; }
+      @keyframes blink { 50% { opacity: 0.35; } }
+      #topright { top: 14px; right: 16px; text-align: right; font-size: 18px; line-height: 1.5; }
+      #topright b { color: var(--gold); }
+      #motebar { bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; }
+      #motebar i { width: 22px; height: 14px; border-radius: 4px; border: 1px solid var(--gold); background: rgba(20, 20, 40, 0.6); }
+      #motebar i.on { background: #fff6c2; box-shadow: 0 0 8px #ffe58a; }
+      #skills { bottom: 14px; right: 16px; display: flex; gap: 10px; }
+      .skill { width: 54px; height: 54px; border-radius: 12px; border: 2px solid var(--gold); background: rgba(14, 20, 48, 0.75); position: relative; overflow: hidden; text-align: center; font-size: 11px; }
+      .skill span { position: relative; z-index: 1; display: block; margin-top: 8px; font-size: 20px; }
+      .skill .cd { position: absolute; left: 0; bottom: 0; width: 100%; background: rgba(0, 0, 0, 0.6); }
+      .skill.off { border-color: #555; }
+      #prompt { bottom: 70px; left: 50%; transform: translateX(-50%); font-size: 18px; color: var(--core); display: none; }
+      #arrow { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 26px solid var(--lamp); display: none; filter: drop-shadow(0 0 6px var(--lamp)); }
+      #toast { top: 60px; left: 50%; transform: translateX(-50%); font-size: 18px; color: var(--core); opacity: 0; }
+      #windwarn { top: 96px; left: 50%; transform: translateX(-50%); font-size: 16px; color: #cfe3ff; display: none; }
+      #fps { bottom: 4px; left: 6px; font-size: 12px; opacity: 0.7; display: none; }
+      .screen { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: rgba(14, 20, 48, 0.86); text-align: center; z-index: 5; }
+      .screen h1 { color: var(--lamp); font-size: 44px; margin: 0 0 10px; }
+      .screen p { max-width: 640px; line-height: 1.6; }
+      .screen button { font: inherit; font-size: 18px; margin: 6px; padding: 10px 26px; border-radius: 10px; border: 2px solid var(--gold); background: #1b2350; color: var(--text); cursor: pointer; min-width: 220px; }
+      .screen button:hover { background: #2a3570; }
+      .screen label { display: block; margin: 12px 0; font-size: 17px; }
+      .screen input[type=range] { width: 240px; vertical-align: middle; }
+      .quote { font-style: italic; color: var(--core); }
+      .help { font-size: 14px; opacity: 0.8; margin-top: 18px; }
+      #dawn { background: linear-gradient(#ffb347cc, #ffe9b0cc); color: #2a1a10; }
+      #dawn h1 { color: #7a2a10; }
     </style>
   </head>
   <body>
-    <div id="help">WASD/mũi tên: đi · Kéo chuột hoặc Q/Z: xoay camera · Space: nhảy · E: nạp đèn · F/Shift: tỏa sáng · R: chơi lại (sau khi kết thúc)</div>
+    <div id="flames" class="hud"></div>
+    <div id="timer" class="hud"></div>
+    <div id="topright" class="hud"></div>
+    <div id="motebar" class="hud"></div>
+    <div id="skills" class="hud">
+      <div class="skill" id="sk-dash"><span>💨</span>Lướt<div class="cd"></div></div>
+      <div class="skill" id="sk-pulse"><span>✨</span>Tỏa sáng<div class="cd"></div></div>
+    </div>
+    <div id="prompt" class="hud"></div>
+    <div id="arrow" class="hud"></div>
+    <div id="toast" class="hud"></div>
+    <div id="windwarn" class="hud">🍃 Gió sắp nổi...</div>
+    <div id="fps" class="hud"></div>
+
+    <div id="menu" class="screen">
+      <h1>Đảo Đèn Lồng</h1>
+      <p>Sương đen đã nuốt ánh sáng của ba hòn đảo. Hãy cùng Mây gom đom đóm và thắp lại những Đèn Lồng Lớn trước bình minh.</p>
+      <button data-act="start">Bắt đầu</button>
+      <button data-act="settings">Cài đặt</button>
+      <p class="help">WASD: đi · Chuột/Q/Z: xoay camera · Space: nhảy · Shift: lướt · E: nạp đèn · F: tỏa sáng · Esc/P: tạm dừng</p>
+    </div>
+    <div id="intro" class="screen">
+      <h1 id="intro-title"></h1>
+      <p class="quote" id="intro-quote"></p>
+      <button data-act="play">Vào Đêm</button>
+    </div>
+    <div id="pause" class="screen">
+      <h1>Tạm dừng</h1>
+      <button data-act="resume">Tiếp tục</button>
+      <button data-act="restart">Chơi lại Đêm</button>
+      <button data-act="settings">Cài đặt</button>
+      <button data-act="menu">Về menu</button>
+    </div>
+    <div id="settings" class="screen">
+      <h1>Cài đặt</h1>
+      <label>Âm lượng <input type="range" id="set-vol" min="0" max="1" step="0.05" /></label>
+      <label>Độ nhạy chuột <input type="range" id="set-sens" min="0.05" max="1" step="0.05" /></label>
+      <button data-act="back">Xong</button>
+    </div>
+    <div id="result" class="screen">
+      <h1 id="result-title"></h1>
+      <p id="result-text"></p>
+      <button data-act="next" id="btn-next">Đêm kế tiếp</button>
+      <button data-act="retry" id="btn-retry">Chơi lại Đêm này</button>
+      <button data-act="menu">Về menu</button>
+    </div>
+    <div id="dawn" class="screen">
+      <h1>Bình Minh</h1>
+      <p>Ba hòn đảo đã sáng trở lại. Ông Đăng mỉm cười: "Cháu đã giữ lửa cho cả biển mây."</p>
+      <p style="font-size:26px">Tổng điểm: <b id="dawn-score"></b></p>
+      <button data-act="menu">Về menu</button>
+    </div>
     <script type="module" src="/src/web/main.js"></script>
   </body>
 </html>

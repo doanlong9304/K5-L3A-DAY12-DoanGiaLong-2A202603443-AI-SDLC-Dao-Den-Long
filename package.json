@@ -8,8 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test tests/",
-    "proof": "node scripts/proof.js",
-    "verify": "npm test && npm run proof"
+    "proof": "node scripts/proof.js phase-2",
+    "verify": "npm test && npm run proof",
+    "fps": "node scripts/fps.js"
   },
   "dependencies": {
     "three": "0.187.0"
