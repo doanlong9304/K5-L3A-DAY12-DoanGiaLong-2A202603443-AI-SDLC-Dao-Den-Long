@@ -62,6 +62,6 @@ Bot ([scripts/bot.js](../../../scripts/bot.js)) nhặt đom đóm gần nhất, 
 
 ## Tốc độ
 
-Một đêm đầy đủ (18000 tick = 300 s game) chạy trong 109 ms (gồm khởi động Node).
+Một đêm đầy đủ (18000 tick = 300 s game) chạy trong 100 ms (gồm khởi động Node).
 
 **Tổng: TẤT CẢ ĐẠT**

@@ -26,4 +26,4 @@ Kết quả headless chi tiết (tự sinh): [RESULTS.md](RESULTS.md). Chạy l�
 | Output JSONL: snapshot / event / end, làm tròn 3 chữ số | Mọi scenario; `default_world` kiểm tra chu kỳ snapshot và dòng end | RESULTS.md, `runs/*/out.jsonl` | ĐẠT |
 | Tính tất định | 3 seed × 2 lần, byte giống nhau; test trong `npm test` | RESULTS.md | ĐẠT |
 | Mã thoát 0 / 2 / khác 0 | `tests/cli.test.js` (5 kiểu inputs hỏng + scenario hỏng) | RESULTS.md mục "Mã thoát" | ĐẠT |
-| Chạy trên macOS/Linux | Docker `node:26-slim`: `npm test` đạt trong container; bản web chạy trên mọi trình duyệt | Lệnh trong GAME.md | ĐẠT (Linux qua Docker; chưa thử trên macOS thật) |
+| Chạy trên macOS/Linux | Docker `node:26-slim`: `npm test` đạt trong container; bản web chạy trên mọi trình duyệt | Lệnh trong README.md | ĐẠT (Linux qua Docker; chưa thử trên macOS thật) |
