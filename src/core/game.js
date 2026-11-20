@@ -32,7 +32,8 @@ function nextId(game, prefix) {
 }
 
 // ---------------------------------------------------------------- setup
-export function createGame({ seed = 0, night = 1, scenario = null } = {}) {
+export function createGame({ seed = 0, night = 1, scenario = null, bench = false } = {}) {
+  if (bench) return createBench(seed);
   const sc = scenario || {};
   const map = MAPS[night];
   const game = {
@@ -140,6 +141,22 @@ function newShade(game, id, pos, state = 'spawning') {
   return { id, pos: [...pos], state, left: state === 'spawning' ? R.shade_spawning_ticks : 0, push: null, pushLeft: 0, recoilDir: null, evict: false, target: null, targetLantern: null, drainTicks: 0 };
 }
 
+// Ticket-04 benchmark scene (same for everyone): Night 1, exactly 200 wandering shades spread over the
+// island and exactly 100 motes (seed 42 by default), L1-L3 lit with fuel 100, Mây standing at (0,0,0).
+// Spawning, damage, pickup, fuel decay and end conditions are off; shades still follow the normal AI.
+function createBench(seed) {
+  const game = createGame({ seed, night: 1, scenario: {
+    random_motes: false, random_shades: false, random_drifters: false, wind_enabled: false, motes: [], shades: [], drifters: [], charms: [],
+    lanterns: ['L1', 'L2', 'L3'].map((id) => ({ id, lit: true, fuel: 100 })),
+  } });
+  game.bench = true;
+  const R_ISLAND = 38;
+  const spot = () => { const r = R_ISLAND * Math.sqrt(game.rng()), a = game.rng() * 2 * Math.PI; return [round3(r * Math.cos(a)), round3(r * Math.sin(a))]; };
+  for (let i = 0; i < 200; i++) { const [x, z] = spot(); game.shades.push(newShade(game, nextId(game, 'S'), [x, R.shade_hover, z], 'wander')); }
+  for (let i = 0; i < 100; i++) { const [x, z] = spot(); game.motes.push({ id: nextId(game, 'M'), pos: [x, 0, z], kind: 'random', ttl: null, point: null }); }
+  return game;
+}
+
 export const timeLeft = (game) => Math.max(0, game.t0 - game.simTick / TICK_RATE);
 
 // ---------------------------------------------------------------- helpers
@@ -227,7 +244,8 @@ export function step(game, input) {
   for (const m of game.motes) if (m.ttl !== null) m.ttl--;
   game.motes = game.motes.filter((m) => m.ttl === null || m.ttl > 0);
   for (const c of game.charms) if (!c.available && c.respawn > 0 && --c.respawn === 0) c.available = true;
-  // Ticket-03 (step 2): fuel decay + drain, then lanterns with fuel <= 0 go out right after
+  // Ticket-03 (step 2): fuel decay + drain, then lanterns with fuel <= 0 go out right after (off in the bench scene)
+  if (!game.bench) {
   for (const s of [...game.shades].sort(byId)) {
     if (s.state !== 'drain') continue;
     const l = game.lanterns.find((x) => x.id === s.targetLantern);
@@ -240,6 +258,7 @@ export function step(game, input) {
     l.fuel -= FUEL_DECAY;
     if (l.fuel <= 0) { l.lit = false; l.fuel = 0; l.deposited = 0; emit('lantern_out', { lantern_id: l.id }); }
   }
+  }
 
   // 3. Player movement (jump, dash, pads, wind) + fall check
   if (p.pendingRespawn && p.fallWait === 0) {
@@ -251,8 +270,8 @@ export function step(game, input) {
   if (playerActive(game)) movePlayer(game, input, e, emit);
   if (game.wind.active && --game.wind.left <= 0) game.wind.active = false; // a gust pushes for exactly 300 ticks
 
-  // 4. Pickup motes and charms
-  if (playerActive(game)) {
+  // 4. Pickup motes and charms (off in the bench scene)
+  if (playerActive(game) && !game.bench) {
     for (let i = 0; i < game.motes.length && p.carried < capacity(p);) {
       const m = game.motes[i];
       if (dXZ(p.pos, m.pos) <= T.pickup_radius && Math.abs(p.pos[1] - m.pos[1]) <= R.pickup_dy) {
@@ -366,8 +385,8 @@ export function step(game, input) {
   for (const d of game.drifters) updateDrifter(game, d);
   game.drifters = game.drifters.filter((d) => !(d.state === 'flee' && d.left === 0));
 
-  // 9. Contact: drifters steal first, then shades hit (ascending id)
-  if (playerActive(game)) {
+  // 9. Contact: drifters steal first, then shades hit (ascending id); no damage in the bench scene
+  if (playerActive(game) && !game.bench) {
     for (const d of [...game.drifters].sort(byId)) {
       if ((d.state === 'idle' || d.state === 'chase') && !d.stoleOnce && p.carried > 0 && dXZ(d.pos, p.pos) <= R.drifter_hit) {
         const amount = Math.min(R.drifter_steal_max, p.carried);
@@ -399,6 +418,7 @@ export function step(game, input) {
   }
 
   // 10. Spawning (new entities interact from the next tick)
+  if (game.bench) return events; // bench: no spawning, no end conditions
   spawnScheduled(game, emit);
 
   // 11. Win / lose

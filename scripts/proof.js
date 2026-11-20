@@ -7,7 +7,7 @@ import os from 'node:os';
 import { SCENARIOS, WANDER_INPUTS, parse } from '../tests/scenarios.js';
 import { botInputs } from './bot.js';
 
-const PHASE = process.argv[2] || 'phase-3';
+const PHASE = process.argv[2] || 'phase-4';
 const OUT = join('docs/proof', PHASE);
 const RUNS = join(OUT, 'runs');
 rmSync(RUNS, { recursive: true, force: true });
@@ -102,7 +102,7 @@ const speed = [1, 2, 3].map((night) => {
 
 const md = `# ${PHASE} — Kết quả kiểm chứng (tự sinh bởi \`npm run proof\`)
 
-> File này và thư mục \`runs/\` được script sinh ra từ CLI headless thật (Contract v1.1), không sửa tay.
+> File này và thư mục \`runs/\` được script sinh ra từ CLI headless thật (Contract v1.3), không sửa tay.
 > Chạy lại ở tag tương ứng: \`npm ci && npm run proof\`.
 
 Môi trường: Node ${process.version}, ${os.type()} ${os.release()} (${os.arch()}), CPU: ${os.cpus()[0]?.model ?? 'n/a'}

@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 5 --out docs/proof/phase-4/runs/pickup_height/out.jsonl --scenario docs/proof/phase-4/runs/pickup_height/scenario.json

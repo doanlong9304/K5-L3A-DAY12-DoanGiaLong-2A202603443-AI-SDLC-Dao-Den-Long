@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 2 --ticks 2400 --out docs/proof/phase-4/runs/drifter_spawn/out.jsonl --scenario docs/proof/phase-4/runs/drifter_spawn/scenario.json --snapshot-every 1200

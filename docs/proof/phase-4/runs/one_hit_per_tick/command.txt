@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 1 --out docs/proof/phase-4/runs/one_hit_per_tick/out.jsonl --scenario docs/proof/phase-4/runs/one_hit_per_tick/scenario.json

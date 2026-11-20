@@ -1,0 +1,65 @@
+{
+  "browser": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "checks": [
+    {
+      "name": "min font size on menu >= 18 px",
+      "pass": true,
+      "detail": "18 (topright)"
+    },
+    {
+      "name": "keymap lists all 9 actions",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "remap conflict detected and reported (jump -> E used by interact)",
+      "pass": true,
+      "detail": "⚠ Phím E đang dùng cho \"Tương tác (nạp / châm dầu)\". Chọn phím khác."
+    },
+    {
+      "name": "remap saved (jump -> J)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "large text x1.25 (html font-size 22.5px)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "key mapping persisted after reload",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "large text persisted after reload",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "restore defaults (jump -> Space)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "min font size in HUD while playing >= 18 px",
+      "pass": true,
+      "detail": "18 (topright)"
+    },
+    {
+      "name": "leaderboard API stores an entry on disk",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "invalid name rejected (400)",
+      "pass": true,
+      "detail": "400"
+    },
+    {
+      "name": "leaderboard screen from main menu shows the entry",
+      "pass": true,
+      "detail": "1Mây_test77722026-11-20 16:44"
+    }
+  ]
+}

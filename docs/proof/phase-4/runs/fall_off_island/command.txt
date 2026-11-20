@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 300 --out docs/proof/phase-4/runs/fall_off_island/out.jsonl --scenario docs/proof/phase-4/runs/fall_off_island/scenario.json --inputs docs/proof/phase-4/runs/fall_off_island/inputs.json --snapshot-every 1

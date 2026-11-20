@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 125 --out docs/proof/phase-4/runs/pulse_stun_push/out.jsonl --scenario docs/proof/phase-4/runs/pulse_stun_push/scenario.json --inputs docs/proof/phase-4/runs/pulse_stun_push/inputs.json --snapshot-every 1

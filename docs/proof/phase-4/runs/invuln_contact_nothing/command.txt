@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 40 --out docs/proof/phase-4/runs/invuln_contact_nothing/out.jsonl --scenario docs/proof/phase-4/runs/invuln_contact_nothing/scenario.json --snapshot-every 1

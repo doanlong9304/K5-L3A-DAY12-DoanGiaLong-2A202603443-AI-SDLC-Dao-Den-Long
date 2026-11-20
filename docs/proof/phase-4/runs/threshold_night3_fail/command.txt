@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 3 --ticks 100 --out docs/proof/phase-4/runs/threshold_night3_fail/out.jsonl --scenario docs/proof/phase-4/runs/threshold_night3_fail/scenario.json

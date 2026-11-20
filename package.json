@@ -1,15 +1,18 @@
 {
   "name": "dao-den-long",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "node scripts/play.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test tests/",
-    "proof": "node scripts/proof.js phase-3",
+    "test": "node --test --test-concurrency=1 tests/",
+    "proof": "node scripts/proof.js phase-4",
     "verify": "npm test && npm run proof",
+    "bench": "node scripts/bench.js --seed 42 --duration 30 --out bench.json",
+    "soak": "node --expose-gc src/soak.js --seed 7 --nights 10 --out soak.json",
     "fps": "node scripts/fps.js"
   },
   "dependencies": {

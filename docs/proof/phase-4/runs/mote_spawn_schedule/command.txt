@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 1200 --out docs/proof/phase-4/runs/mote_spawn_schedule/out.jsonl --scenario docs/proof/phase-4/runs/mote_spawn_schedule/scenario.json

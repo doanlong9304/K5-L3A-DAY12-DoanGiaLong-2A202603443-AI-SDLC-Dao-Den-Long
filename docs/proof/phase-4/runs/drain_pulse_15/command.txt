@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 2 --out docs/proof/phase-4/runs/drain_pulse_15/out.jsonl --scenario docs/proof/phase-4/runs/drain_pulse_15/scenario.json --inputs docs/proof/phase-4/runs/drain_pulse_15/inputs.json --snapshot-every 1

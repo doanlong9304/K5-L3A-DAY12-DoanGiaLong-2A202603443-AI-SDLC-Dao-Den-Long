@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 30 --out docs/proof/phase-4/runs/interact_edge_only/out.jsonl --scenario docs/proof/phase-4/runs/interact_edge_only/scenario.json --inputs docs/proof/phase-4/runs/interact_edge_only/inputs.json

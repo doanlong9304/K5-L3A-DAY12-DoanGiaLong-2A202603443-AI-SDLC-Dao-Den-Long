@@ -204,10 +204,21 @@ export function makeMote(kind) {
   return g;
 }
 
+// Shades share geometry and one material per visual state (200 shades in the bench scene => no per-shade
+// materials and no per-frame material edits; the renderer only swaps references).
+const shadeBodyGeo = new THREE.SphereGeometry(0.7, 16, 12);
+const shadeRimGeo = new THREE.SphereGeometry(0.78, 16, 12);
+const bodyMat = (c) => new THREE.MeshStandardMaterial({ color: c, emissive: PAL.shadeBody, transparent: true, opacity: 0.92 });
+const rimMat = (c, o) => new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: o, side: THREE.BackSide });
+export const SHADE_MATS = {
+  body: bodyMat(PAL.shadeBody), bodyStun: bodyMat(PAL.shadeStun),
+  rim: { calm: rimMat(PAL.shadeRim, 0.35), alert: rimMat(PAL.shadeRim, 0.6), stun: rimMat(PAL.shadeRim, 0.1) },
+  rimCb: { calm: rimMat(0x00b3ff, 0.35), alert: rimMat(0x00b3ff, 0.6), stun: rimMat(0x00b3ff, 0.1) }, // colour-blind palette
+};
 export function makeShade() {
   const g = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.SphereGeometry(0.7, 16, 12), new THREE.MeshStandardMaterial({ color: PAL.shadeBody, emissive: PAL.shadeBody, transparent: true, opacity: 0.92 }));
-  const rim = new THREE.Mesh(new THREE.SphereGeometry(0.78, 16, 12), new THREE.MeshBasicMaterial({ color: PAL.shadeRim, transparent: true, opacity: 0.35, side: THREE.BackSide }));
+  const body = new THREE.Mesh(shadeBodyGeo, SHADE_MATS.body);
+  const rim = new THREE.Mesh(shadeRimGeo, SHADE_MATS.rim.calm);
   g.add(body, rim);
   g.userData = { body, rim };
   return g;

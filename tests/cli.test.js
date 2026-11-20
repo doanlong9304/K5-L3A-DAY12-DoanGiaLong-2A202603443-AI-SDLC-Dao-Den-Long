@@ -13,9 +13,10 @@ const file = (name, content) => { const p = join(dir, name); writeFileSync(p, co
 
 test('game.contract.json tuning mirrors src/core/tuning.js', () => {
   const c = JSON.parse(readFileSync('game.contract.json', 'utf8'));
-  assert.equal(c.contract_version, '1.2');
+  assert.equal(c.contract_version, '1.3');
+  for (const k of ['bench_cmd', 'soak_cmd']) assert.equal(typeof c[k], 'string');
   assert.deepEqual(c.tuning, JSON.parse(JSON.stringify(TUNING)));
-  for (const k of ['team', 'build_cmd', 'run_cmd', 'headless_cmd']) assert.equal(typeof c[k], 'string');
+  for (const k of ['team', 'build_cmd', 'run_cmd', 'headless_cmd', 'bench_cmd', 'soak_cmd']) assert.equal(typeof c[k], 'string');
 });
 
 test('valid run exits 0 and writes JSONL ending with an end line', () => {
@@ -93,4 +94,35 @@ test('missing required option => non-zero exit with stderr message', () => {
   assert.notEqual(r.status, 0);
   assert.notEqual(r.status, 2);
   assert.match(r.stderr, /--out/);
+});
+
+test('soak_cmd: nights in one process, no crash, memory bound (Ticket-04)', () => {
+  const out = join(dir, 'soak.json');
+  const r = spawnSync(process.execPath, ['--expose-gc', 'src/soak.js', '--seed', '7', '--nights', '4', '--out', out], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  const s = JSON.parse(readFileSync(out, 'utf8'));
+  assert.deepEqual(Object.keys(s), ['nights', 'crashes', 'results', 'mem_start_mb', 'mem_end_mb', 'duration_s']);
+  assert.equal(s.nights, 4);
+  assert.equal(s.crashes, 0);
+  assert.equal(s.results.length, 4);
+  assert.ok(s.mem_end_mb <= 1.2 * s.mem_start_mb, JSON.stringify(s));
+});
+
+test('bench scene (core): 200 wandering shades, 100 motes, L1-L3 fuel 100, nothing spawns/ends/decays', async () => {
+  const { createGame, step, snapshot } = await import('../src/core/game.js');
+  const g = createGame({ seed: 42, bench: true });
+  const s0 = snapshot(g);
+  assert.equal(s0.shades.length, 200);
+  assert.ok(s0.shades.every((x) => x.state === 'wander'));
+  assert.equal(s0.motes_active, 100);
+  assert.deepEqual(s0.lanterns.filter((l) => l.lit).map((l) => [l.id, l.fuel]), [['L1', 100], ['L2', 100], ['L3', 100]]);
+  const names = new Set();
+  for (let i = 0; i < 1200; i++) for (const e of step(g, { move: [0, 0] })) names.add(e.name);
+  const s1 = snapshot(g);
+  assert.equal(s1.shades.length, 200);
+  assert.equal(s1.motes_active, 100);
+  assert.equal(s1.state, 'playing');
+  assert.deepEqual(s1.lanterns.filter((l) => l.lit).map((l) => l.fuel), [100, 100, 100]);
+  assert.deepEqual([...names], ['night_start']);
+  assert.deepEqual(s1.player.pos, [0, 0, 0]);
 });

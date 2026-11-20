@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 2 --ticks 30 --out docs/proof/phase-4/runs/drifter_pulse_chase/out.jsonl --scenario docs/proof/phase-4/runs/drifter_pulse_chase/scenario.json --inputs docs/proof/phase-4/runs/drifter_pulse_chase/inputs.json

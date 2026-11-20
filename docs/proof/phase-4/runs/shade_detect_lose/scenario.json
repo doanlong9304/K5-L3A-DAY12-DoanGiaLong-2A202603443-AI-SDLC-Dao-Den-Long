@@ -1,0 +1,38 @@
+{
+  "random_motes": false,
+  "random_shades": false,
+  "random_drifters": false,
+  "wind_enabled": false,
+  "motes": [],
+  "shades": [
+    {
+      "id": "S1",
+      "pos": [
+        14,
+        1,
+        0
+      ]
+    },
+    {
+      "id": "S2",
+      "pos": [
+        0,
+        1,
+        18.5
+      ],
+      "state": "chase"
+    },
+    {
+      "id": "S3",
+      "pos": [
+        5,
+        1,
+        0
+      ],
+      "state": "spawning",
+      "state_ticks_left": 30
+    }
+  ],
+  "drifters": [],
+  "charms": []
+}
