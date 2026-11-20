@@ -21,7 +21,7 @@ npm ci
 npm start            # mở game ở http://localhost:5173 (bảng xếp hạng lưu ở data/leaderboard.json)
 ```
 
-Bản chơi không cần cài đặt: tải `dao-den-long-web-v1.0.0.zip` ở [Release v1.0.0](../../releases/tag/v1.0.0), giải nén, rồi mở bằng một web server tĩnh bất kỳ (ví dụ `npx serve dist`). Ở bản tĩnh, bảng xếp hạng lưu trong trình duyệt (localStorage).
+Bản chơi không cần cài đặt: tải `dao-den-long-web-v1.0.0.zip` ở [Release v1.0.0](../../releases/tag/v1.0.0), giải nén, rồi chạy một web server tĩnh trong thư mục vừa giải nén (ví dụ `python3 -m http.server 8000`, sau đó mở http://localhost:8000). Ở bản tĩnh, bảng xếp hạng lưu trong trình duyệt (localStorage).
 
 Docker (đường Linux, chạy toàn bộ test và headless):
 

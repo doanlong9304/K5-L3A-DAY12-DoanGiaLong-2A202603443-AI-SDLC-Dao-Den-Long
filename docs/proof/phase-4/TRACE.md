@@ -14,7 +14,7 @@ Số đo là của máy dev (Intel i3-1125G4, Intel UHD, 8 GB, Windows 11, Chrom
 | 4. Phụ đề / chỉ báo: Bóng Mực xuất hiện (+ mũi tên mép), gió sắp thổi, 10 s cuối, đèn < 30 | Code `caption()` gắn vào event `shade_spawned`, `windEta`, đồng hồ, dầu đèn; mũi tên `#threat` | `src/web/main.js` | **Chưa kiểm chứng** bằng ảnh/UI smoke (chỉ có trong code) |
 | 4. Giảm chuyển động | Tắt nhấp nháy khi bất tử, vòng sáng khi Tỏa Sáng, nhấp nháy đồng hồ (CSS) | Code | Chưa kiểm chứng tự động (game không có rung camera) |
 | 4. Chữ ≥ 18 px, chữ lớn ×1.25 | UI smoke đo font nhỏ nhất đang hiển thị: menu 18 px, HUD 18 px; chữ lớn: `html` 22.5 px, được lưu | ui-smoke.json | ĐẠT |
-| 5. Clone sạch, tối đa 3 lệnh | `git clone`, `npm ci`, `npm start` | README | ĐẠT (đã chạy `npm start` trên máy dev) |
+| 5. Clone sạch, tối đa 3 lệnh | `git clone`, `npm ci`, `npm start` | README | ĐẠT (clone sạch → `npm ci` → `npm start`: game tải, lưu điểm ra data/leaderboard.json, export đúng) |
 | 5. README, CHANGELOG 4 phase, CREDITS, LICENSE | Có đủ | [README](../../../README.md), [CHANGELOG](../../../CHANGELOG.md), [CREDITS](../../../CREDITS.md), [LICENSE](../../../LICENSE) | ĐẠT |
 | 5. Release v1.0.0 có bản chạy được | Zip thư mục web tĩnh `dist/` + hướng dẫn | GitHub Release | Xem ghi chú phát hành |
 | 6. Contract v1.3 (`bench_cmd`, `soak_cmd`) | Test kiểm tra khóa | `tests/cli.test.js` | ĐẠT |
