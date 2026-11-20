@@ -1,5 +1,5 @@
 // Measures average FPS of the built game at 1280x720 in a real (GPU) headless Edge/Chrome via CDP.
-// Usage: npm run build && npx vite preview --port 4173 &  then  node scripts/fps.js [browserPath]
+// Usage: npm run build && npx vite preview --port 4173 &  then  node scripts/fps.js [browserPath] [outFile]
 // Writes docs/proof/phase-2/fps.json. Each sample = frames counted over ~1 s of real time.
 import { spawn } from 'node:child_process';
 import { writeFileSync, mkdtempSync } from 'node:fs';
@@ -44,4 +44,4 @@ async function measure(night) {
 
 for (const n of [1, 2, 3]) await measure(n);
 results.machine = { cpu: os.cpus()[0]?.model, os: `${os.type()} ${os.release()}`, browser };
-writeFileSync('docs/proof/phase-2/fps.json', JSON.stringify(results, null, 2) + '\n');
+writeFileSync(process.argv[3] || 'docs/proof/phase-2/fps.json', JSON.stringify(results, null, 2) + '\n');

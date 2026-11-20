@@ -98,6 +98,7 @@ Toàn bộ chỉ nằm ở phần hiển thị `src/web/`, core không bị ản
 3. **Vòng an toàn 6 m hiện quanh đèn đã sáng**, cho người chơi thấy chỗ trú.
 4. **Lời dẫn của Ông Đăng** cho từng Đêm, và màn Bình Minh khi thắng cả ba Đêm.
 5. **Âm thanh tổng hợp bằng WebAudio**: không cần file asset, nên không có vấn đề bản quyền.
+6. **Cây cối và tảng đá nhỏ** trên cả ba đảo: cây tròn kiểu cổ tích, đá low-poly. Vị trí cố định cho mỗi Đêm, tránh đèn, điểm đom đóm, bục nhảy, cầu và mép tầng. Chỉ để trang trí (không va chạm), nên bản đồ chuẩn và đầu ra headless không đổi. Bằng chứng: [ảnh Đêm 1–3](docs/proof/decor/), FPS sau khi thêm [59.9 / 54.3 / 51.7](docs/proof/decor/fps.json) (≥ 30), `npm test` vẫn đạt.
 
 Bằng chứng phần lõi vẫn đúng: `src/headless.js` không import `src/web/`, và `npm test` cùng `npm run proof` đều đạt ở cùng commit (xem [RESULTS.md](docs/proof/phase-3/RESULTS.md)).
 

@@ -85,6 +85,73 @@ export function buildWorld(map) {
   return g;
 }
 
+// ---------- decor: trees and small rocks (visual only, no collision, core untouched) ----------
+// Fixed per night (own tiny LCG, not the game rng) so every run looks the same and headless output never changes.
+function lcg(seed) {
+  let s = seed >>> 0;
+  return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; };
+}
+const DECOR = { 1: { trees: 38, rocks: 30, seed: 11 }, 2: { trees: 26, rocks: 24, seed: 22 }, 3: { trees: 34, rocks: 30, seed: 33 } };
+
+function decorSpots(map, count, rand, minGap, taken) {
+  const avoid = [
+    ...map.lanterns.map((l) => [l.pos, 4.5]), // keep lanterns and their light clear
+    ...map.motePoints.map((p) => [p, 2.2]), // fireflies stay visible
+    ...map.pads.map((p) => [p.pos, 3]),
+    [map.start, 4],
+  ];
+  const spots = [];
+  for (let tries = 0; spots.length < count && tries < count * 60; tries++) {
+    const x = (rand() * 2 - 1) * 90, z = (rand() * 2 - 1) * 50;
+    const y = map.ground(x, z);
+    if (y === null || y > 6) continue; // off the island, or the bell tower
+    if (map.ground(x + 1.5, z) !== y || map.ground(x - 1.5, z) !== y || map.ground(x, z + 1.5) !== y || map.ground(x, z - 1.5) !== y) continue; // edges, ramps, bridge rims
+    if (map.night === 2 && x > 24 && x < 46 && Math.abs(z) < 4) continue; // bamboo bridge and its ends
+    const p = [x, y, z];
+    const near = (q, r) => Math.hypot(q[0] - x, q[2] - z) < r;
+    if (avoid.some(([q, r]) => near(q, r)) || taken.some((q) => near(q, minGap))) continue;
+    spots.push(p); taken.push(p);
+  }
+  return spots;
+}
+
+export function buildDecor(map) {
+  const cfg = DECOR[map.night], rand = lcg(cfg.seed), taken = [];
+  const g = new THREE.Group();
+  const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), up = new THREE.Vector3(0, 1, 0), v = new THREE.Vector3(), sc = new THREE.Vector3();
+
+  // Trees: wooden trunk + two round canopies (soft fairy-tale shapes, grass greens)
+  const trees = decorSpots(map, cfg.trees, rand, 3.5, taken);
+  const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.18, 0.28, 1.6, 7), mat(PAL.wood), trees.length);
+  const crownA = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.1, 1), mat(0x2f5d50, { flatShading: true }), trees.length);
+  const crownB = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.75, 1), mat(0x3e7563, { flatShading: true }), trees.length);
+  trees.forEach(([x, y, z], i) => {
+    const s = 0.8 + rand() * 0.6, rot = rand() * Math.PI * 2;
+    q.setFromAxisAngle(up, rot);
+    m4.compose(v.set(x, y + 0.8 * s, z), q, sc.set(s, s, s)); trunk.setMatrixAt(i, m4);
+    m4.compose(v.set(x, y + 2.1 * s, z), q, sc.set(s, s * 0.9, s)); crownA.setMatrixAt(i, m4);
+    m4.compose(v.set(x + 0.35 * s, y + 2.9 * s, z - 0.2 * s), q, sc.set(s, s, s)); crownB.setMatrixAt(i, m4);
+  });
+  g.add(trunk, crownA, crownB);
+
+  // Small rocks: squashed low-poly stones, a few with a smaller pebble beside them
+  const rocks = decorSpots(map, cfg.rocks, rand, 1.5, taken);
+  const rock = new THREE.InstancedMesh(new THREE.DodecahedronGeometry(0.45, 0), mat(0x4a4f5c, { flatShading: true }), rocks.length * 2);
+  let n = 0;
+  rocks.forEach(([x, y, z]) => {
+    const s = 0.6 + rand() * 0.9;
+    q.setFromAxisAngle(v.set(rand(), 1, rand()).normalize(), rand() * Math.PI);
+    m4.compose(new THREE.Vector3(x, y + 0.15 * s, z), q, sc.set(s * 1.2, s * 0.7, s)); rock.setMatrixAt(n++, m4);
+    if (rand() < 0.5) {
+      m4.compose(new THREE.Vector3(x + 0.7 * s, y + 0.08, z + 0.3 * s), q, sc.set(s * 0.45, s * 0.35, s * 0.45)); rock.setMatrixAt(n++, m4);
+    }
+  });
+  rock.count = n;
+  g.add(rock);
+  g.userData = { trees: trees.length, rocks: n };
+  return g;
+}
+
 export function makeMay() {
   const g = new THREE.Group();
   const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.35, 0.7, 4, 12), mat(PAL.coat));

@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { createGame, step, timeLeft, windEta, TICK_RATE } from '../core/game.js';
 import { MAPS } from '../core/maps.js';
 import { TUNING as T, RULES as R } from '../core/tuning.js';
-import { PAL, buildWorld, makeMay, makeLantern, makeMote, makeShade, makeDrifter, makeCharm } from './world.js';
+import { PAL, buildWorld, buildDecor, makeMay, makeLantern, makeMote, makeShade, makeDrifter, makeCharm } from './world.js';
 import { sfx, setVolume, unlock, startMusic, stopMusic } from './audio.js';
 
 const $ = (id) => document.getElementById(id);
@@ -55,6 +55,7 @@ function loadNight(n) {
   const scenario = litN > 0 ? { lanterns: MAPS[n].lanterns.slice(0, litN).map((l) => ({ id: l.id, lit: true, deposited: T.lantern_cost })) } : null;
   game = createGame({ seed, night: n, scenario });
   world = buildWorld(MAPS[n]);
+  world.add(buildDecor(MAPS[n])); // creative: trees + small rocks (visual only)
   scene.add(world);
   may = makeMay();
   scene.add(may);
