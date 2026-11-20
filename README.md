@@ -1,6 +1,6 @@
 # Đảo Đèn Lồng
 
-> 🎬 **Video demo:** *(link Release v1.0.0 / docs/demo/demo.mp4 — bổ sung khi có video)* · 📦 **Release:** [v1.0.0](../../releases/tag/v1.0.0) · Đề bài lab (giữ nguyên bản gốc): [docs/lab/](docs/lab/README.md)
+> 🎬 **Video demo:** [docs/demo/demo.mp4](docs/demo/demo.mp4) · 📦 **Release:** [v1.0.0](../../releases/tag/v1.0.0) · Đề bài lab (giữ nguyên bản gốc): [docs/lab/](docs/lab/README.md)
 
 Game 3D góc nhìn thứ ba chạy trên trình duyệt (Three.js), kèm chế độ headless (Node.js) theo **Test Contract v1.3**.
 Mây, người giữ đèn nhỏ tuổi, gom đom đóm để thắp và **giữ các Đèn Lồng Lớn sáng tới bình minh** trên ba hòn đảo, né Bóng Mực hút dầu và Gió Lạc cướp đom đóm.
