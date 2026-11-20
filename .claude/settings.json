@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node scripts/hooks/stop-tests.js", "timeout": 120 }
+        ]
+      }
+    ]
+  }
+}

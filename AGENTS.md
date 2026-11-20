@@ -8,8 +8,11 @@ lab's Test Contract exactly. Correctness and evidence beat graphics.
 - Dev (browser): `npm run dev`
 - Build web: `npm run build` (output `dist/`)
 - Test: `npm test` (node:test, files in `tests/`)
+- Evidence: `npm run proof` (writes `docs/proof/phase-1/RESULTS.md` + `runs/`); `npm run verify` = both
 - Linux path: `docker build -t dao-den-long .` then `docker run --rm dao-den-long`
-- Headless: `node src/headless.js ...` (to be created in Phase 1, per Test Contract)
+- Headless: `node src/headless.js --seed 1 --night 1 --ticks 600 --out out.jsonl [--scenario f] [--inputs f]`
+- Requirement scenarios live in `tests/scenarios.js` (one object per requirement). Skill: `.claude/skills/verify`.
+- Stop hook (`.claude/settings.json`) blocks finishing while `npm test` is red.
 
 ## Architecture rules
 - `src/core/` = pure game logic. MUST NOT import `three`, DOM, or anything browser-only.
