@@ -1,4 +1,4 @@
-// Single source of truth for gameplay numbers (Ticket-02 standard values, Contract v1.1).
+// Single source of truth for gameplay numbers (Ticket-02 standard values + Ticket-03 change request, Contract v1.2).
 // TUNING MUST match game.contract.json "tuning" (enforced by tests/cli.test.js).
 export const TUNING = Object.freeze({
   player_speed: 6,
@@ -9,7 +9,7 @@ export const TUNING = Object.freeze({
   interact_radius: 2.0,
   pulse_cost: 3,
   pulse_radius: 5,
-  night1_duration_s: 300,
+  night1_duration_s: 240, // Ticket-03 (was 300)
   flames: 3,
   invuln_s: 1.5,
   hit_drop_ratio: 0.5,
@@ -21,17 +21,26 @@ export const TUNING = Object.freeze({
   shade_hit_radius: 1.0,
   fall_enabled: true,
   score: Object.freeze({
-    per_mote: 10, // per mote DEPOSITED into a lantern
+    per_mote: 5, // Ticket-03: per mote deposited (light, relight or refuel)
     per_lantern: 100,
     per_stun: 5, // per shade hit by a pulse (each time, even if already stunned)
-    per_second_left: 2,
+    per_second_left: 0, // Ticket-03: time bonus removed
     per_flame_left: 50,
   }),
   dash_speed: 14,
   dash_duration_s: 0.2,
   dash_cooldown_s: 1.5,
-  night2_duration_s: 330,
-  night3_duration_s: 360,
+  night2_duration_s: 270, // Ticket-03 (was 330)
+  night3_duration_s: 300, // Ticket-03 (was 360)
+  // Ticket-03 / Contract v1.2
+  fuel_max: 100,
+  fuel_decay_per_s: 1.0,
+  fuel_per_mote: 10,
+  relight_cost: 5,
+  win_ratio: 0.6,
+  drain_per_s: 5,
+  low_fuel_threshold: 30,
+  capacity_max: 20,
 });
 
 // Standard rules from Ticket-02 Part 1/3 that are not keys of the contract tuning block.
@@ -85,4 +94,12 @@ export const RULES = Object.freeze({
   wind_ticks: 300,
   wind_speed: 2,
   wind_warn_ticks: 120, // visual warning only
+  // Ticket-03
+  capacity_per_light: 2,
+  relight_score: 40,
+  drain_stun_score: 15, // total for a shade that was draining when hit by a pulse
+  dawn_lantern_score: 50, // + floor(fuel) per lit lantern at dawn (win only)
+  drain_range: 2,
+  drain_chase_range: 6,
+  fuel_drain_event_every: 60,
 });

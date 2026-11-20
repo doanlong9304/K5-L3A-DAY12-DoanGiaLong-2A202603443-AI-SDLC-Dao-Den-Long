@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Test Contract v1.1 headless CLI.
+// Test Contract v1.2 headless CLI.
 // node src/headless.js --seed <int> --night <1-3> [--scenario f.json] [--inputs f.json]
 //                      --ticks <int> --out <file.jsonl> [--snapshot-every <int>]
 import { readFileSync, writeFileSync } from 'node:fs';

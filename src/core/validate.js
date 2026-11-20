@@ -1,4 +1,4 @@
-// Validation for Test Contract v1.1 input files. Throws FormatError on malformed data
+// Validation for Test Contract v1.2 input files. Throws FormatError on malformed data
 // (the headless CLI maps that to exit code 2).
 import { MAPS } from './maps.js';
 
@@ -16,7 +16,7 @@ const checkInt = (v, where) => { if (v !== undefined && !isNonNegInt(v)) fail(`$
 const checkId = (v, where) => { if (v !== undefined && typeof v !== 'string') fail(`${where}: expected string`); };
 
 const BUTTONS = ['jump', 'interact', 'pulse', 'dash', 'pause'];
-const SHADE_STATES = new Set(['spawning', 'wander', 'chase', 'recoil', 'stunned']);
+const SHADE_STATES = new Set(['spawning', 'wander', 'chase', 'recoil', 'stunned', 'drain']);
 const DRIFTER_STATES = new Set(['idle', 'chase', 'flee']);
 
 export function validateInputs(data) {
@@ -45,7 +45,7 @@ export function validateScenario(data, night = 1) {
     const p = data.player;
     if (!isObj(p)) fail('scenario.player: expected object');
     if (p.pos !== undefined) checkVec3(p.pos, 'scenario.player.pos');
-    for (const k of ['carried', 'flames', 'invuln_ticks', 'dash_cd_ticks', 'pulse_cd_ticks', 'charm_ticks']) checkInt(p[k], `scenario.player.${k}`);
+    for (const k of ['carried', 'flames', 'invuln_ticks', 'dash_cd_ticks', 'pulse_cd_ticks', 'charm_ticks', 'successful_lights']) checkInt(p[k], `scenario.player.${k}`);
   }
   for (const k of ['random_motes', 'random_shades', 'random_drifters', 'wind_enabled']) if (data[k] !== undefined) checkBool(data[k], `scenario.${k}`);
   if (data.time_left_s !== undefined && !(isNum(data.time_left_s) && data.time_left_s >= 0)) fail('scenario.time_left_s: expected number >= 0');
@@ -74,6 +74,7 @@ export function validateScenario(data, night = 1) {
       checkId(s.id, `${at}.id`);
       if (s.state !== undefined && !SHADE_STATES.has(s.state)) fail(`${at}.state: expected one of ${[...SHADE_STATES].join(', ')}`);
       checkInt(s.state_ticks_left, `${at}.state_ticks_left`);
+      checkId(s.target_lantern_id, `${at}.target_lantern_id`);
     });
     uniqueIds(data.shades, 'scenario.shades');
   }
@@ -111,6 +112,8 @@ export function validateScenario(data, night = 1) {
       if (l.pos !== undefined) checkVec3(l.pos, `${at}.pos`);
       checkInt(l.deposited, `${at}.deposited`);
       if (l.lit !== undefined) checkBool(l.lit, `${at}.lit`);
+      if (l.ever_lit !== undefined) checkBool(l.ever_lit, `${at}.ever_lit`);
+      if (l.fuel !== undefined && !(isNum(l.fuel) && l.fuel >= 0 && l.fuel <= 100)) fail(`${at}.fuel: expected number in [0, 100]`);
     });
   }
   return { ...data, ...(motes ? { motes } : {}) };

@@ -13,7 +13,7 @@ const file = (name, content) => { const p = join(dir, name); writeFileSync(p, co
 
 test('game.contract.json tuning mirrors src/core/tuning.js', () => {
   const c = JSON.parse(readFileSync('game.contract.json', 'utf8'));
-  assert.equal(c.contract_version, '1.1');
+  assert.equal(c.contract_version, '1.2');
   assert.deepEqual(c.tuning, JSON.parse(JSON.stringify(TUNING)));
   for (const k of ['team', 'build_cmd', 'run_cmd', 'headless_cmd']) assert.equal(typeof c[k], 'string');
 });
