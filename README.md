@@ -47,6 +47,7 @@ docker run --rm -v "$PWD/out:/out" dao-den-long node src/headless.js --seed 1 --
 
 ## Luật chơi
 - **Ba Đêm nối tiếp:** Đảo Bến (5 đèn, 4 phút), Đảo Cau (2 đảo, cầu tre, bục nhảy, 6 đèn, 4:30), Đảo Chuông (3 tầng, dốc, gió mạnh, 7 đèn, 5 phút). Thắng thì sang Đêm kế. Thua thì chơi lại Đêm đó, hoặc lưu điểm vào bảng xếp hạng.
+- **Chọn / đổi đảo:** nút "Chọn đảo" ở menu chính và "Đổi đảo" trong menu tạm dừng cho phép vào thẳng bất kỳ Đêm nào. Vào thẳng Đêm 2 hoặc 3 là chế độ luyện tập: điểm không lưu vào bảng xếp hạng.
 - Nhặt đom đóm bằng cách đi gần (≤ 1 m). Sức chứa 10, +2 mỗi lần thắp thành công (tối đa 20). Thắp lần đầu cần 10 đom đóm, thắp lại cần 5.
 - Đèn sáng có 100 dầu, hao 1/giây. Châm dầu bằng E (mỗi đom đóm +10 dầu). Đèn có dầu ≥ 30 thì có vùng an toàn 6 m. Dưới 30, Bóng Mực tới hút dầu.
 - **Thắng ở bình minh** nếu còn Ngọn Lửa và số đèn đang sáng ≥ 60% (3/5, 4/6, 5/7). Hết 3 Ngọn Lửa là thua.
@@ -109,6 +110,7 @@ Tất cả chỉ nằm ở phần hiển thị `src/web/`, nên đầu ra headle
 4. Lời dẫn của Ông Đăng cho từng Đêm, và màn Bình Minh.
 5. Âm thanh tổng hợp bằng WebAudio, không dùng file asset.
 6. Cây cối và tảng đá nhỏ trên ba đảo, chỉ để trang trí, không va chạm ([ảnh](docs/proof/decor/), [FPS](docs/proof/decor/fps.json)).
+7. Màn hình **Chọn đảo / Đổi đảo** ([ảnh](docs/proof/phase-4/screenshot-islands.png), [kiểm tra UI 10/10](docs/proof/phase-4/ui-smoke-islands.json)).
 
 Bằng chứng phần lõi vẫn đúng: `src/headless.js` không import `src/web/`, và `npm test` cùng `npm run proof` đạt ở cùng commit.
 

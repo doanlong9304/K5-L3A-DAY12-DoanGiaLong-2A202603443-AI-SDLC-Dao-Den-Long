@@ -46,6 +46,7 @@ const STORY = {
   3: 'Ông Đăng: "Đảo Chuông cao và lộng gió. Đèn nào cạn dầu thì châm kịp, kẻo Bóng Mực kéo tới."',
 };
 let game = null, night = 1, totalScore = 0, nightsWon = 0, runSeed = 0, mode = 'menu', prevMode = 'menu';
+let practice = false; // started from "Chọn đảo" at Night 2/3: playable, but not saved to the leaderboard
 let world = null, may = null, lastSeed = 0;
 const meshes = { lanterns: new Map(), motes: new Map(), shades: new Map(), drifters: new Map(), charms: new Map() };
 let lastBeep = -1;
@@ -97,9 +98,27 @@ function goIntro(n) {
 }
 function goPlay() { mode = 'playing'; show(null); startMusic(); }
 function goPause() { mode = 'paused'; show('pause'); }
-function goMenu() { mode = 'menu'; stopMusic(); totalScore = 0; nightsWon = 0; show('menu'); }
+function goMenu() { mode = 'menu'; stopMusic(); totalScore = 0; nightsWon = 0; practice = false; show('menu'); }
+// Island select (web only): start the night chain on any island
+function showIslands() {
+  if (mode !== 'islands') prevMode = mode;
+  $('island-list').innerHTML = [1, 2, 3].map((n) => {
+    const m = MAPS[n], need = Math.ceil(T.win_ratio * m.lanterns.length);
+    return `<button type="button" data-act="island" data-night="${n}">Đêm ${n} — ${m.name}<small>${m.lanterns.length} đèn · cần ${need} đèn sáng · ${Math.floor(m.duration_s / 60)}:${String(m.duration_s % 60).padStart(2, '0')}</small></button>`;
+  }).join('');
+  mode = 'islands';
+  show('islands');
+}
+function pickIsland(n) {
+  stopMusic();
+  totalScore = 0; nightsWon = 0;
+  practice = n !== 1;
+  mode = 'menu';
+  goIntro(n);
+}
 function attachNameForm(screenId) {
   const f = $('nameform');
+  if (practice) { f.style.display = 'none'; return; } // practice runs are not ranked
   $(screenId).insertBefore(f, $(screenId).querySelector('button'));
   f.style.display = 'block';
   $('namemsg').textContent = '';
@@ -116,7 +135,7 @@ function goResult({ result, reason }) {
     if (night === 3) { $('dawn-score').textContent = totalScore; mode = 'dawn'; show('dawn'); attachNameForm('dawn'); return; }
   } else sfx.lose();
   $('result-title').textContent = result === 'won' ? `Đêm ${night} đã sáng!` : `Đêm ${night} chưa qua...`;
-  $('result-text').innerHTML = `${why}<br>Điểm Đêm: <b>${result === 'won' ? game.score : 0}</b> · Tổng điểm: <b>${totalScore}</b>`;
+  $('result-text').innerHTML = `${why}<br>Điểm Đêm: <b>${result === 'won' ? game.score : 0}</b> · Tổng điểm: <b>${totalScore}</b>${practice ? '<br><small>Chế độ chọn đảo: điểm không lưu vào Bảng xếp hạng.</small>' : ''}`;
   $('btn-next').style.display = result === 'won' ? '' : 'none';
   $('btn-retry').style.display = result === 'won' ? 'none' : '';
   show('result');
@@ -176,12 +195,17 @@ function openSettings() {
   show('settings');
 }
 document.addEventListener('click', (e) => {
-  const key = e.target?.dataset?.key;
+  const btn = e.target?.closest?.('[data-act],[data-key]');
+  if (!btn) return;
+  const key = btn.dataset.key;
   if (key) { waitingFor = key; $('keymsg').textContent = ''; renderKeymap(); return; }
-  const act = e.target?.dataset?.act;
+  const act = btn.dataset.act;
   if (!act) return;
   unlock();
-  if (act === 'start') { totalScore = 0; nightsWon = 0; mode = 'menu'; goIntro(1); }
+  if (act === 'start') { totalScore = 0; nightsWon = 0; practice = false; mode = 'menu'; goIntro(1); }
+  else if (act === 'islands') showIslands();
+  else if (act === 'island') pickIsland(Number(btn.dataset.night));
+  else if (act === 'islands-back') { mode = prevMode; show(prevMode === 'paused' ? 'pause' : 'menu'); }
   else if (act === 'play' || act === 'resume') goPlay();
   else if (act === 'restart' || act === 'retry') goIntro(night);
   else if (act === 'next') goIntro(night + 1);

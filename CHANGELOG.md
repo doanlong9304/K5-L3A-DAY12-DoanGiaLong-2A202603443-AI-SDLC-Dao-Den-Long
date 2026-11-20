@@ -1,5 +1,8 @@
 # Changelog
 
+## [Unreleased] — sau v1.0.0
+- Web: màn hình **Chọn đảo** (menu chính) và nút **Đổi đảo** (menu tạm dừng) để vào thẳng Đêm 1/2/3. Vào thẳng Đêm 2–3 là chế độ luyện tập, không lưu vào bảng xếp hạng. Chỉ sửa phần hiển thị; luật, headless và contract không đổi. Kiểm tra: `scripts/ui-smoke-islands.js` (10/10), `npm test` 108/108.
+
 ## [v1.0.0 / phase-4] — Ticket-04 "Bình minh: phát hành v1.0.0" (Contract v1.3)
 
 ### Thêm

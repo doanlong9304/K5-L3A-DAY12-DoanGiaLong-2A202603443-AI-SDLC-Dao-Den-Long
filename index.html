@@ -48,6 +48,9 @@
       #keymap button { min-width: 8rem; padding: 4px 10px; margin: 0; }
       #keymap button.wait { background: var(--gold); color: #000; }
       #keymsg, #namemsg { min-height: 1.4em; color: var(--core); }
+      #island-list { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin: 8px 0; }
+      #island-list button { min-width: 13rem; padding: 14px 18px; line-height: 1.5; }
+      #island-list button small { display: block; font-size: 1rem; color: var(--core); }
       table.lb { border-collapse: collapse; margin: 10px 0; }
       table.lb td, table.lb th { padding: 4px 12px; border-bottom: 1px solid #2a3570; }
       table.lb th { color: var(--gold); }
@@ -81,6 +84,7 @@
       <h1>Đảo Đèn Lồng</h1>
       <p>Sương đen đã nuốt ánh sáng của ba hòn đảo. Hãy cùng Mây gom đom đóm, giữ các Đèn Lồng Lớn sáng tới bình minh.</p>
       <button data-act="start">Bắt đầu</button>
+      <button data-act="islands">Chọn đảo</button>
       <button data-act="leaders">Bảng xếp hạng</button>
       <button data-act="settings">Cài đặt</button>
       <p class="help" id="help"></p>
@@ -94,6 +98,7 @@
       <h1>Tạm dừng</h1>
       <button data-act="resume">Tiếp tục</button>
       <button data-act="restart">Chơi lại Đêm</button>
+      <button data-act="islands">Đổi đảo</button>
       <button data-act="settings">Cài đặt</button>
       <button data-act="menu">Về menu</button>
     </div>
@@ -123,6 +128,12 @@
       <p>Ba hòn đảo đã sáng trở lại. Ông Đăng mỉm cười: "Cháu đã giữ lửa cho cả biển mây."</p>
       <p style="font-size:1.45rem">Tổng điểm: <b id="dawn-score"></b></p>
       <button data-act="menu">Về menu</button>
+    </div>
+    <div id="islands" class="screen">
+      <h1>Chọn đảo</h1>
+      <div id="island-list"></div>
+      <p class="help">Chọn Đêm 2 hoặc 3 là chế độ luyện tập: điểm không lưu vào Bảng xếp hạng (chỉ lượt chơi từ Đêm 1 mới được tính).</p>
+      <button data-act="islands-back">Quay lại</button>
     </div>
     <div id="leaders" class="screen">
       <h1>Bảng xếp hạng</h1>

@@ -1,0 +1,55 @@
+{
+  "browser": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "checks": [
+    {
+      "name": "menu \"Chọn đảo\" opens island list",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "island list shows the 3 islands",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "\"Quay lại\" returns to the menu",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "picking Night 3 opens its intro",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Night 3 is playing (5:00 timer, 7 lanterns)",
+      "pass": true,
+      "detail": "04:58 Đèn 0/7Điểm 0"
+    },
+    {
+      "name": "pause menu has \"Đổi đảo\"",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "\"Đổi đảo\" from pause opens island list",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "\"Quay lại\" from pause returns to pause menu",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "switching to Night 2 opens its intro",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Night 2 is playing (6 lanterns)",
+      "pass": true,
+      "detail": "Đèn 0/6Điểm 0"
+    }
+  ]
+}
