@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { SCENARIOS, parse } from './scenarios.js';
+import { SCENARIOS, WANDER_INPUTS, parse } from './scenarios.js';
 import { runHeadless } from '../src/core/run.js';
 import { validateScenario, validateInputs } from '../src/core/validate.js';
 
@@ -18,7 +18,10 @@ for (const sc of SCENARIOS) {
 }
 
 test('determinism: same seed => identical output; different seed => different world', () => {
-  const run = (seed) => runHeadless({ seed, ticks: 3000 }).join('\n');
-  assert.equal(run(7), run(7));
-  assert.notEqual(run(7), run(8));
+  const run = (seed) => runHeadless({ seed, inputs: WANDER_INPUTS, ticks: 18000 }).join('\n');
+  const a = run(7);
+  assert.equal(a, run(7));
+  assert.notEqual(a, run(8));
+  // the wander run must actually exercise mechanics, otherwise this test is weak
+  for (const name of ['mote_picked', 'pulse', 'player_hit']) assert.ok(a.includes(`"name":"${name}"`), `no ${name} event`);
 });

@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 60 --out docs/proof/phase-1/runs/shade_chase/out.jsonl --scenario docs/proof/phase-1/runs/shade_chase/scenario.json

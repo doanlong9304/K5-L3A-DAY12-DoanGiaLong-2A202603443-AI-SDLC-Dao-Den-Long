@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 120 --out docs/proof/phase-1/runs/carry_capacity/out.jsonl --scenario docs/proof/phase-1/runs/carry_capacity/scenario.json --inputs docs/proof/phase-1/runs/carry_capacity/inputs.json

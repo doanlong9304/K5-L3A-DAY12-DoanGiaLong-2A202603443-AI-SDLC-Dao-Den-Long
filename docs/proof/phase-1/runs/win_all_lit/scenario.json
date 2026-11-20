@@ -1,0 +1,49 @@
+{
+  "random_motes": false,
+  "random_shades": false,
+  "motes": [],
+  "shades": [],
+  "player": {
+    "pos": [
+      0,
+      0,
+      0
+    ],
+    "carried": 5
+  },
+  "lanterns": [
+    {
+      "id": "L1",
+      "pos": [
+        0,
+        0,
+        2
+      ],
+      "lit": true,
+      "deposited": 5
+    },
+    {
+      "id": "L2",
+      "lit": true,
+      "deposited": 5
+    },
+    {
+      "id": "L3",
+      "lit": true,
+      "deposited": 5
+    },
+    {
+      "id": "L4",
+      "lit": true,
+      "deposited": 5
+    },
+    {
+      "id": "L5",
+      "pos": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}

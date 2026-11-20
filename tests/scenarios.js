@@ -302,5 +302,18 @@ export const SCENARIOS = [
   },
 ];
 
+// Wandering inputs for determinism checks: changes direction/yaw every second, pulses every 2.5 s,
+// jumps and interacts now and then. Generated arithmetically (no randomness).
+export const WANDER_INPUTS = {
+  frames: Array.from({ length: 300 }, (_, i) => ({
+    tick: i * 60,
+    move: [Math.round(Math.sin(i * 1.7) * 100) / 100, Math.round(Math.cos(i * 0.9) * 100) / 100],
+    cam_yaw_deg: (i * 37) % 360,
+    pulse: i % 5 === 2,
+    jump: i % 7 === 3,
+    interact: i % 3 === 1,
+  })),
+};
+
 function round(x) { return Math.round(x * 1000) / 1000; }
 export { parse };

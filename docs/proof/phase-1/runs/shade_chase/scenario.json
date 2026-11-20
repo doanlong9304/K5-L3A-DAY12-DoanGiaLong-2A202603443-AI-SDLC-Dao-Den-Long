@@ -1,0 +1,33 @@
+{
+  "random_motes": false,
+  "random_shades": false,
+  "motes": [],
+  "shades": [
+    {
+      "id": "S1",
+      "pos": [
+        20,
+        1,
+        0
+      ]
+    }
+  ],
+  "lanterns": [
+    {
+      "id": "L2",
+      "pos": [
+        30,
+        0,
+        30
+      ]
+    },
+    {
+      "id": "L5",
+      "pos": [
+        -30,
+        0,
+        30
+      ]
+    }
+  ]
+}

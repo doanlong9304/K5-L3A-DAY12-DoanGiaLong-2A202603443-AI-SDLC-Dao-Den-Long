@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test tests/"
+    "test": "node --test tests/",
+    "proof": "node scripts/proof.js",
+    "verify": "npm test && npm run proof"
   },
   "dependencies": {
     "three": "0.187.0"

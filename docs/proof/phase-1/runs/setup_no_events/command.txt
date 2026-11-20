@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 10 --out docs/proof/phase-1/runs/setup_no_events/out.jsonl --scenario docs/proof/phase-1/runs/setup_no_events/scenario.json
