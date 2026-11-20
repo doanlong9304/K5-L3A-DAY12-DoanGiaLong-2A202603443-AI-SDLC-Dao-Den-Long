@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 60 --out docs/proof/phase-3/runs/drain_stacks/out.jsonl --scenario docs/proof/phase-3/runs/drain_stacks/scenario.json

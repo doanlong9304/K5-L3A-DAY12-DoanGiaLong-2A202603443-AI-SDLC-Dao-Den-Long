@@ -116,8 +116,15 @@ export function makeLantern() {
   light.position.y = 3.4;
   const ring = new THREE.Mesh(new THREE.RingGeometry(5.9, 6, 64), new THREE.MeshBasicMaterial({ color: PAL.lampOn, transparent: true, opacity: 0 }));
   ring.rotation.x = -Math.PI / 2; ring.position.y = 0.03;
-  g.add(post, shell, core, light, ring);
-  g.userData = { shell, core, light, ring };
+  // Ticket-03: fuel bar above lit lanterns; "torn paper" mark on unlit ones (readable without colour)
+  const barBg = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.18), new THREE.MeshBasicMaterial({ color: 0x222233, side: THREE.DoubleSide }));
+  barBg.position.y = 4.5;
+  const bar = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.18), new THREE.MeshBasicMaterial({ color: PAL.lampCore, side: THREE.DoubleSide }));
+  bar.position.set(0, 4.5, 0.01);
+  const tear = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.9, 0.08), new THREE.MeshBasicMaterial({ color: 0x0b0b12 }));
+  tear.position.set(0.35, 3.4, 0.55); tear.rotation.z = 0.5;
+  g.add(post, shell, core, light, ring, barBg, bar, tear);
+  g.userData = { shell, core, light, ring, barBg, bar, tear };
   return g;
 }
 

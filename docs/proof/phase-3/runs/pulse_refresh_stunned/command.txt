@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 110 --out docs/proof/phase-3/runs/pulse_refresh_stunned/out.jsonl --scenario docs/proof/phase-3/runs/pulse_refresh_stunned/scenario.json --inputs docs/proof/phase-3/runs/pulse_refresh_stunned/inputs.json --snapshot-every 10

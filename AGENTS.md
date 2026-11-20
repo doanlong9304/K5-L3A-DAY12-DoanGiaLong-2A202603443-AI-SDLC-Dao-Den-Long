@@ -1,7 +1,7 @@
 # AGENTS.md — Đảo Đèn Lồng
 
 3D third-person game (Three.js, web) + headless simulation (Node) that must follow the
-lab's Test Contract (currently **v1.1**, 3 nights) exactly. Correctness and evidence beat graphics.
+lab's Test Contract (currently **v1.2**: lantern fuel, drain, dawn win) exactly. Correctness and evidence beat graphics.
 
 ## Commands
 - Install: `npm ci` · Dev: `npm run dev` · Build: `npm run build`
@@ -25,7 +25,8 @@ lab's Test Contract (currently **v1.1**, 3 nights) exactly. Correctness and evid
 - Requirements source of truth: lab board ticket text (paste it; the board is not machine-readable).
   Do not invent requirements; if ambiguous, add a row to `docs/notes/assumptions.md` and follow it.
 - New requirement => add a scenario object to `tests/scenarios.js` FIRST (phase, name, req, scenario, inputs, ticks, check).
-- Before changing an old test, ask: did the ticket change this rule? If yes, update it and list it in the phase TRACE.md "Test đã sửa" table. Never delete or skip silently.
+- Before changing an old test, ask: did the ticket change this rule? If yes, update/delete it and list it in CHANGELOG.md + the phase TRACE.md. Never skip silently.
+- Lantern fuel is an integer count of 1/60 units in core (`FUEL_MAX = 6000`); convert only in snapshot/events. Design rationale: `docs/adr/`.
 - When a test fails, decide test-bug vs code-bug from the tick order before "fixing" either (pickup runs before interact; movement before contact).
 - Small commits, one concern each. Commit messages: no AI co-author trailer (user preference).
 - Evidence goes in `docs/proof/phase-N/` and must be reproducible at the phase tag. Never hand-edit program output, never write tests that always pass. Look at screenshots before claiming what they show.

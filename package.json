@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test tests/",
-    "proof": "node scripts/proof.js phase-2",
+    "proof": "node scripts/proof.js phase-3",
     "verify": "npm test && npm run proof",
     "fps": "node scripts/fps.js"
   },

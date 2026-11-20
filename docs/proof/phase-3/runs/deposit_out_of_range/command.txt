@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 10 --out docs/proof/phase-3/runs/deposit_out_of_range/out.jsonl --scenario docs/proof/phase-3/runs/deposit_out_of_range/scenario.json --inputs docs/proof/phase-3/runs/deposit_out_of_range/inputs.json

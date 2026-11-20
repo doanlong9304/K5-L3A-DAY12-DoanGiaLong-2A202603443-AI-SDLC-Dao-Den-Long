@@ -11,7 +11,7 @@ const q = new URLSearchParams(location.search);
 
 // ---------- settings (persisted) ----------
 const SETTINGS_KEY = 'dao-den-long-settings';
-const settings = { volume: 0.6, sensitivity: 0.3 };
+const settings = { volume: 0.6, sensitivity: 0.3, colorblind: false };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')); } catch { /* storage unavailable */ }
 const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* ignore */ } };
 setVolume(settings.volume);
@@ -84,7 +84,8 @@ function goPause() { mode = 'paused'; show('pause'); }
 function goMenu() { mode = 'menu'; stopMusic(); totalScore = 0; show('menu'); }
 function goResult({ result, reason }) {
   mode = 'result';
-  const why = { all_lit: 'Mọi Đèn Lồng Lớn đã sáng.', dawn: 'Trời sáng mà đảo vẫn chưa đủ đèn.', no_flames: 'Mây đã hết Ngọn Lửa.' }[reason];
+  const need = Math.ceil(T.win_ratio * game.lanterns.length);
+  const why = { dawn_survived: `Mây giữ đảo sáng tới bình minh (cần ${need} đèn).`, dawn: `Trời sáng mà đảo chưa đủ ${need} đèn sáng.`, no_flames: 'Mây đã hết Ngọn Lửa.' }[reason];
   if (result === 'won') {
     totalScore += game.score;
     sfx.win();
@@ -105,11 +106,12 @@ document.addEventListener('click', (e) => {
   else if (act === 'restart' || act === 'retry') goIntro(night);
   else if (act === 'next') goIntro(night + 1);
   else if (act === 'menu') goMenu();
-  else if (act === 'settings') { prevMode = mode; $('set-vol').value = settings.volume; $('set-sens').value = settings.sensitivity; show('settings'); }
+  else if (act === 'settings') { prevMode = mode; $('set-vol').value = settings.volume; $('set-sens').value = settings.sensitivity; $('set-cb').checked = !!settings.colorblind; show('settings'); }
   else if (act === 'back') { show(prevMode === 'paused' ? 'pause' : 'menu'); }
 });
 $('set-vol').addEventListener('input', (e) => { settings.volume = Number(e.target.value); setVolume(settings.volume); saveSettings(); });
 $('set-sens').addEventListener('input', (e) => { settings.sensitivity = Number(e.target.value); saveSettings(); });
+$('set-cb').addEventListener('change', (e) => { settings.colorblind = e.target.checked; saveSettings(); });
 
 // ---------- input ----------
 const keys = new Set();
@@ -150,7 +152,9 @@ function onEvents(evs) {
   for (const e of evs) {
     switch (e.name) {
       case 'mote_picked': sfx.pick(); break;
-      case 'lantern_lit': sfx.lit(); say(`Đèn ${e.data.lantern_id} đã sáng!`); break;
+      case 'lantern_lit': sfx.lit(); say(`Đèn ${e.data.lantern_id} ${e.data.relight ? 'được thắp lại' : 'đã sáng'}!`); break;
+      case 'lantern_out': sfx.lose(); say(`Đèn ${e.data.lantern_id} đã cạn dầu và tắt!`); break;
+      case 'refuel': sfx.pick(); say(`Châm dầu đèn ${e.data.lantern_id}: ${e.data.fuel}`); break;
       case 'pulse': sfx.pulse(); pulseFx = 1; break;
       case 'player_hit': sfx.hit(); say(e.data.by === 'fall' ? 'Mây rơi xuống biển mây!' : `Bị Bóng Mực chạm! Còn ${e.data.flames} Ngọn Lửa`); break;
       case 'shade_spawned': sfx.shade(); break;
@@ -211,14 +215,26 @@ function render(dt) {
   may.visible = !(p.invuln > 0 && Math.floor(t * 12) % 2 === 0) && p.fallWait === 0;
 
   const lit = game.lanterns.filter((l) => l.lit).length, total = game.lanterns.length;
+  const blinkOn = Math.floor(t * 2) % 2 === 0; // 1 Hz blink
   for (const l of game.lanterns) {
-    const m = meshes.lanterns.get(l.id), u = m.userData, k = l.deposited / T.lantern_cost;
+    const m = meshes.lanterns.get(l.id), u = m.userData;
+    const cost = l.everLit ? T.relight_cost : T.lantern_cost, k = l.deposited / cost;
+    const fuel = l.fuel / TICK_RATE, low = l.lit && fuel < T.low_fuel_threshold;
+    const glow = l.lit && !(low && !blinkOn);
     u.shell.material.color.setHex(l.lit ? PAL.lampOn : PAL.lampOff);
-    u.shell.material.emissive.setHex(l.lit ? PAL.lampOn : 0x000000);
-    u.shell.material.emissiveIntensity = l.lit ? 1 : 0;
-    u.core.visible = l.lit || k > 0;
-    u.light.intensity = l.lit ? 160 : k * 12;
-    u.ring.material.opacity = l.lit ? 0.35 : 0;
+    u.shell.material.emissive.setHex(glow ? PAL.lampOn : 0x000000);
+    u.shell.material.emissiveIntensity = glow ? 1 : 0;
+    u.core.visible = glow || (!l.lit && k > 0);
+    u.light.intensity = glow ? 160 : l.lit ? 40 : k * 12;
+    u.ring.material.opacity = l.lit && !low ? 0.35 : 0; // zone only while fuel >= 30
+    // fuel bar (blinks with the lantern when low), unlit = folded 20% + torn paper
+    u.barBg.visible = u.bar.visible = l.lit && !(low && !blinkOn);
+    u.bar.scale.x = Math.max(0.001, fuel / T.fuel_max);
+    u.bar.position.x = -0.8 * (1 - fuel / T.fuel_max);
+    u.bar.material.color.setHex(low ? (settings.colorblind ? 0xffffff : PAL.danger) : PAL.lampCore);
+    u.barBg.lookAt(camera.position); u.bar.lookAt(camera.position);
+    u.shell.scale.set(1, l.lit ? 1 : 0.8, 1);
+    u.tear.visible = !l.lit;
   }
   ambient.intensity = 0.15 + 0.55 * (lit / total); // Ticket-02: ambient follows progress
 
@@ -233,7 +249,8 @@ function render(dt) {
     m.position.set(s.pos[0], s.pos[1] + Math.sin(t * 3 + s.id.length) * 0.12, s.pos[2]);
     const stunned = s.state === 'stunned', spawning = s.state === 'spawning';
     u.body.material.color.setHex(stunned ? PAL.shadeStun : PAL.shadeBody);
-    u.rim.material.opacity = stunned ? 0.1 : s.state === 'chase' ? 0.6 : 0.35;
+    u.rim.material.opacity = stunned ? 0.1 : s.state === 'chase' || s.state === 'drain' ? 0.6 : 0.35;
+    u.rim.material.color.setHex(settings.colorblind ? 0x00b3ff : PAL.shadeRim); // Ticket-03 colour-blind palette
     m.scale.setScalar(spawning ? 0.4 + 0.6 * (1 - s.left / R.shade_spawning_ticks) : stunned ? 0.8 : 1);
   }
   sync(meshes.drifters, game.drifters, () => makeDrifter());
@@ -282,15 +299,25 @@ function hud(lit, total, dt) {
   const sec = Math.ceil(tl);
   if (mode === 'playing' && tl <= 10 && sec !== lastBeep && tl > 0) { lastBeep = sec; sfx.tick(); }
   $('topright').innerHTML = `Đèn <b>${lit}/${total}</b><br>Điểm <b>${game.score}</b>${totalScore ? `<br><small>Tổng ${totalScore}</small>` : ''}`;
+  const cap = Math.min(T.capacity_max, T.carry_capacity + R.capacity_per_light * p.successfulLights);
+  if (bar.children.length !== cap) bar.innerHTML = '<i></i>'.repeat(cap);
   [...bar.children].forEach((c, i) => c.classList.toggle('on', i < p.carried));
+  bar.title = `${p.carried} / ${cap}`;
+  $('motecount').textContent = `${p.carried} / ${cap}`;
+  timer.textContent = (tl <= 30 && settings.colorblind ? '⚠ ' : '') + timer.textContent;
+  timer.classList.toggle('cb', settings.colorblind);
   const dashCd = p.charm > 0 ? 0 : p.dashCd / R.dash_cd_ticks;
   $('sk-dash').querySelector('.cd').style.height = `${dashCd * 100}%`;
   $('sk-pulse').querySelector('.cd').style.height = `${(p.pulseCd / (T.pulse_cooldown_s * TICK_RATE)) * 100}%`;
   $('sk-pulse').classList.toggle('off', p.carried < T.pulse_cost);
   // deposit prompt
-  const near = game.lanterns.filter((l) => !l.lit && Math.hypot(l.pos[0] - p.pos[0], l.pos[2] - p.pos[2]) <= T.interact_radius);
+  const near = game.lanterns.filter((l) => !(l.lit && l.fuel >= T.fuel_max * TICK_RATE) && Math.hypot(l.pos[0] - p.pos[0], l.pos[2] - p.pos[2]) <= T.interact_radius);
   const prompt = $('prompt');
-  if (near.length) { prompt.style.display = 'block'; prompt.textContent = `E — Nạp ánh sáng (${near[0].deposited}/${T.lantern_cost})`; } else prompt.style.display = 'none';
+  if (near.length) {
+    const l = near[0];
+    prompt.style.display = 'block';
+    prompt.textContent = l.lit ? `E — Châm dầu (${Math.floor(l.fuel / TICK_RATE)}/${T.fuel_max})` : `E — Nạp ánh sáng (${l.deposited}/${l.everLit ? T.relight_cost : T.lantern_cost})`;
+  } else prompt.style.display = 'none';
   // arrow to nearest unlit lantern when off screen
   const arrow = $('arrow');
   const unlit = game.lanterns.filter((l) => !l.lit);

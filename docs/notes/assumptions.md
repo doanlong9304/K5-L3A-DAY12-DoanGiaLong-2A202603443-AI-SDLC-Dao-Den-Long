@@ -48,3 +48,14 @@ Mỗi dòng: chỗ mơ hồ → giả định đã chọn → lý do. Các con s
 | P2-14 | Gió | Bắt đầu ở sim_tick 1800·k, hướng = số nguyên độ ngẫu nhiên theo seed, đẩy đúng 300 tick; cảnh báo 2 s trước chỉ là hiển thị | |
 | P2-15 | Lướt khi đang bay từ bục nhảy | Lướt tạm thay vận tốc ngang; hết lướt thì quay lại vận tốc phóng tới khi chạm đất | "vẫn được lướt" |
 | P2-16 | Tổng điểm khi chạy headless | Mỗi lần chạy headless là một Đêm; `score` là điểm của Đêm đó. Tổng các Đêm đã thắng chỉ có ở bản chơi (màn Bình Minh) | |
+
+## Phase 3 (Ticket-03 / Contract v1.2)
+
+| # | Chỗ ticket chưa quy định | Giả định | Lý do |
+|---|---|---|---|
+| P3-1 | "Không có đèn yếu thì đi về đèn tắt gần nhất như trước" | `wander` đi tới đèn **chưa sáng** gần nhất. Không còn đèn tắt nào thì lang thang giữa các điểm ngẫu nhiên như Phase 2 | Đọc theo nghĩa đen của câu |
+| P3-2 | Bóng Mực `drain` có gây sát thương không | Không. Chỉ `wander`/`chase` gây sát thương; `drain` chuyển sang `chase` khi Mây trong 6 m | `drain` là "đứng yên và hút" |
+| P3-3 | `fuel_drain` | Mỗi Bóng Mực tự đếm số tick đang hút (bắt đầu từ 0 khi vào `drain`, kể cả khi đặt bằng scenario); ghi ở tick đếm thứ 60, 120… với `fuel` sau khi trừ ở bước 2 | "ghi mỗi 60 tick khi đang hút" |
+| P3-4 | Đèn tắt và hết dầu trong cùng bước 2 | Hút trước, hao sau, rồi xét `fuel ≤ 0` một lần cho mỗi đèn | Ticket: "ở bước 2 trừ dầu (hao + bị hút); ngay sau bước 2, đèn có fuel ≤ 0 tắt" |
+| P3-5 | Bóng `drain` bị đẩy ra khi vùng an toàn quay lại | Chuyển ngay sang `wander` | Dầu ≥ 30 là điều kiện về `wander` |
+| P3-6 | `ever_lit` khi scenario đặt `lit: true` | Mặc định `true` (có thể ghi đè bằng `ever_lit`); không tăng `successful_lights` | Ticket: "đèn đặt sẵn bằng scenario không tính" |

@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 2 --out docs/proof/phase-3/runs/relight_cost_5/out.jsonl --scenario docs/proof/phase-3/runs/relight_cost_5/scenario.json --inputs docs/proof/phase-3/runs/relight_cost_5/inputs.json --snapshot-every 1

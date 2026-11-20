@@ -1,0 +1,1 @@
+node src/headless.js --seed 3 --night 1 --inputs docs/proof/phase-3/runs/playthrough-n1-s3/inputs.json --ticks 21600 --out docs/proof/phase-3/runs/playthrough-n1-s3/out.jsonl --snapshot-every 300

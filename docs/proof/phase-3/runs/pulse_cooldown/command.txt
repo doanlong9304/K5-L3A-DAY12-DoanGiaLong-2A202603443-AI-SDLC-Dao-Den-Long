@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 190 --out docs/proof/phase-3/runs/pulse_cooldown/out.jsonl --scenario docs/proof/phase-3/runs/pulse_cooldown/scenario.json --inputs docs/proof/phase-3/runs/pulse_cooldown/inputs.json

@@ -12,5 +12,11 @@
 - **Rủi ro test ẩn:** các giả định P2-1 (điểm xuất phát Đêm 3), P2-4 (thời gian `spawning`), P2-12 (`invuln` là boolean) có thể khác ý giảng viên. Nên hỏi trợ giảng; mỗi điểm sửa được trong 1–2 dòng.
 - **Cần chỉnh harness:** đã thêm vào AGENTS.md quy tắc "thêm scenario trước" và "phân biệt lỗi test và lỗi code theo thứ tự tick", vì lỗi test sai do thứ tự tick đã lặp lại 2 lần.
 
+## Phase 3 (tag `phase-3`)
+- **Đạt:** mô hình đèn có dầu (số nguyên 1/60), `drain`, luật thắng bình minh, sức chứa, điểm mới, Contract v1.2; 20 scenario mới; hồi quy Phase 1–2 còn hiệu lực vẫn đạt (102/102); ADR + CHANGELOG.
+- **Có hỏng phase trước không:** có chủ đích. 2 test thắng sớm bị xóa, 4 test sửa theo điểm/luật mới (danh sách trong CHANGELOG và TRACE).
+- **Chưa kiểm chứng:** chế độ mù màu và nhấp nháy 1 Hz (chỉ có trong code); bot không còn thắng vì chưa biết châm dầu.
+- **Cần chỉnh:** bot nên biết châm dầu và giữ ≥ 60% đèn để làm bằng chứng chơi được ở Phase 4.
+
 ## Tổng kết dự án
 *(viết ở Phase 4)*

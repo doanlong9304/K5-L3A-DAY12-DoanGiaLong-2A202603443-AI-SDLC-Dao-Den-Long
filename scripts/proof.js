@@ -7,7 +7,7 @@ import os from 'node:os';
 import { SCENARIOS, WANDER_INPUTS, parse } from '../tests/scenarios.js';
 import { botInputs } from './bot.js';
 
-const PHASE = process.argv[2] || 'phase-2';
+const PHASE = process.argv[2] || 'phase-3';
 const OUT = join('docs/proof', PHASE);
 const RUNS = join(OUT, 'runs');
 rmSync(RUNS, { recursive: true, force: true });
@@ -18,7 +18,7 @@ const rel = (p) => p.replaceAll('\\', '/');
 let failed = 0;
 
 // 1. Requirement scenarios through the CLI
-const rows = { 1: [], 2: [] };
+const rows = { 1: [], 2: [], 3: [] };
 for (const sc of SCENARIOS) {
   const dir = join(RUNS, sc.name);
   mkdirSync(dir, { recursive: true });
@@ -107,7 +107,13 @@ const md = `# ${PHASE} — Kết quả kiểm chứng (tự sinh bởi \`npm run
 
 Môi trường: Node ${process.version}, ${os.type()} ${os.release()} (${os.arch()}), CPU: ${os.cpus()[0]?.model ?? 'n/a'}
 
-## Tính năng mới Phase 2 (Ticket-02)
+## Change request Phase 3 (Ticket-03)
+
+| Yêu cầu | Đêm | Scenario | Kết quả |
+|---|---|---|---|
+${rows[3].join('\n')}
+
+## Tính năng Phase 2 (Ticket-02), chạy lại
 
 | Yêu cầu | Đêm | Scenario (input + output) | Kết quả |
 |---|---|---|---|

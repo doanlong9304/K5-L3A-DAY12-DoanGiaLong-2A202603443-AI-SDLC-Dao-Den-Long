@@ -1,0 +1,1 @@
+node src/headless.js --seed 1 --night 1 --ticks 2 --out docs/proof/phase-3/runs/refuel/out.jsonl --scenario docs/proof/phase-3/runs/refuel/scenario.json --inputs docs/proof/phase-3/runs/refuel/inputs.json --snapshot-every 1
