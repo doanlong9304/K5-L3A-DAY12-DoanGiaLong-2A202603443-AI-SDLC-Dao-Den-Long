@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Test Contract v1.0 headless CLI.
-// node src/headless.js --seed <int> --night 1 [--scenario f.json] [--inputs f.json]
+// Test Contract v1.1 headless CLI.
+// node src/headless.js --seed <int> --night <1-3> [--scenario f.json] [--inputs f.json]
 //                      --ticks <int> --out <file.jsonl> [--snapshot-every <int>]
 import { readFileSync, writeFileSync } from 'node:fs';
 import { runHeadless } from './core/run.js';
@@ -49,16 +49,16 @@ for (const k of Object.keys(args)) if (!known.has(k)) die(`unknown option --${k}
 
 const seed = intArg(args, 'seed', { required: true });
 const night = intArg(args, 'night', { required: true });
-if (night !== 1) die(`--night ${night} is not available (only night 1)`);
+if (![1, 2, 3].includes(night)) die(`--night ${night} is not available (1, 2 or 3)`);
 const ticks = intArg(args, 'ticks', { required: true, min: 0 });
 const snapshotEvery = intArg(args, 'snapshot-every', { min: 1, def: 10 });
 if (!args.out) die('--out is required');
 
-const scenario = args.scenario ? loadJson(args.scenario, validateScenario, 'scenario') : null;
+const scenario = args.scenario ? loadJson(args.scenario, (d) => validateScenario(d, night), 'scenario') : null;
 const inputs = args.inputs ? loadJson(args.inputs, validateInputs, 'inputs') : null;
 
 try {
-  const lines = runHeadless({ seed, scenario, inputs, ticks, snapshotEvery });
+  const lines = runHeadless({ seed, night, scenario, inputs, ticks, snapshotEvery });
   writeFileSync(args.out, lines.join('\n') + '\n');
 } catch (e) {
   die(e.stack || String(e));

@@ -1,48 +1,88 @@
-// Single source of truth for gameplay numbers. MUST match game.contract.json "tuning"
-// (enforced by tests/contract.test.js).
+// Single source of truth for gameplay numbers (Ticket-02 standard values, Contract v1.1).
+// TUNING MUST match game.contract.json "tuning" (enforced by tests/cli.test.js).
 export const TUNING = Object.freeze({
-  player_speed: 6, // m/s
-  carry_capacity: 5, // motes the player can carry
-  lantern_cost: 5, // motes needed to light one lantern
+  player_speed: 6,
+  carry_capacity: 10,
+  lantern_cost: 10,
   lantern_count_night1: 5,
-  pickup_radius: 1.0, // m, auto pickup
-  interact_radius: 2.5, // m, deposit into a lantern
-  pulse_cost: 1, // carried motes consumed per pulse
-  pulse_radius: 6, // m
+  pickup_radius: 1.0,
+  interact_radius: 2.0,
+  pulse_cost: 3,
+  pulse_radius: 5,
   night1_duration_s: 300,
-  flames: 3, // player health
+  flames: 3,
   invuln_s: 1.5,
-  hit_drop_ratio: 0.5, // floor(carried * ratio) motes lost on hit
-  pulse_stun_s: 3,
+  hit_drop_ratio: 0.5,
+  pulse_stun_s: 2,
   pulse_push_m: 4,
-  pulse_cooldown_s: 2,
-  safe_radius: 4, // m around every lantern (lit or not) that shades cannot enter
-  shade_speed: 4, // m/s
+  pulse_cooldown_s: 3,
+  safe_radius: 6,
+  shade_speed: 4,
   shade_hit_radius: 1.0,
-  fall_enabled: false,
+  fall_enabled: true,
   score: Object.freeze({
-    per_mote: 10,
+    per_mote: 10, // per mote DEPOSITED into a lantern
     per_lantern: 100,
-    per_stun: 20,
-    per_second_left: 1,
+    per_stun: 5, // per shade hit by a pulse (each time, even if already stunned)
+    per_second_left: 2,
     per_flame_left: 50,
   }),
+  dash_speed: 14,
+  dash_duration_s: 0.2,
+  dash_cooldown_s: 1.5,
+  night2_duration_s: 330,
+  night3_duration_s: 360,
 });
 
-// World constants that are not part of the contract tuning block.
-export const WORLD = Object.freeze({
-  island_radius: 35, // player and shades are clamped inside (no falling)
-  lantern_ring_radius: 22, // default lantern layout: regular pentagon
-  initial_motes: 20,
-  max_motes: 20,
-  mote_respawn_s: 3,
-  mote_clear_radius: 3, // random motes never spawn this close to the player
-  initial_shades: 2,
-  max_shades: 5,
-  shade_spawn_s: 30,
-  shade_spawn_min_dist: 15,
-  shade_hover_y: 1.0,
-  jump_speed: 7, // m/s
-  gravity: 20, // m/s^2
-  safe_margin: 0.01, // shades are kept at safe_radius + margin
+// Standard rules from Ticket-02 Part 1/3 that are not keys of the contract tuning block.
+export const RULES = Object.freeze({
+  jump_speed: 7,
+  gravity: 20,
+  step_up: 0.3, // max ledge the player walks up (ramps are gentler than this per tick)
+  pickup_dy: 1.5,
+  mote_initial: 20,
+  mote_cap: 30,
+  mote_spawn_every: 240,
+  drop_ring_min: 1.5,
+  drop_ring_max: 2.5,
+  drop_ttl: 480,
+  shade_first_tick: 300,
+  shade_first_count: 2,
+  shade_detect: 12,
+  shade_lose: 18,
+  shade_wander_speed: 2, // assumption (not specified)
+  shade_spawning_ticks: 60, // assumption (not specified)
+  shade_hit_dy: 1.5,
+  shade_hover: 1.0, // shade centre above ground
+  shade_min_spawn_dist: 15,
+  recoil_m: 2,
+  recoil_ticks: 60,
+  stun_ticks: 120,
+  push_ticks: 15,
+  pulse_center_y: 0.8,
+  evict_ticks: 30,
+  safe_margin: 0.01,
+  invuln_ticks: 90,
+  fall_y: -10,
+  fall_wait: 60,
+  dash_ticks: 12,
+  dash_cd_ticks: 90,
+  drifter_speed: 7,
+  drifter_idle_speed: 2,
+  drifter_max: 2,
+  drifter_every: 1200,
+  drifter_detect: 15,
+  drifter_min_carry: 5,
+  drifter_hit: 1.2,
+  drifter_steal_max: 3,
+  drifter_flee_ticks: 240,
+  drifter_drop_vanish: 120,
+  drifter_hover: 1.5,
+  charm_ticks: 600,
+  charm_respawn: 2700,
+  charm_speed: 7.2,
+  wind_every: 1800,
+  wind_ticks: 300,
+  wind_speed: 2,
+  wind_warn_ticks: 120, // visual warning only
 });

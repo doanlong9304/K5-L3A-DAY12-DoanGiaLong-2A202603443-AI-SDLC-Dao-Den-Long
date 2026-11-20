@@ -1,14 +1,16 @@
 // Headless runner shared by the CLI and the tests. Returns JSONL lines (strings).
 import { createGame, step, snapshot } from './game.js';
 
-export function runHeadless({ seed, scenario = null, inputs = null, ticks, snapshotEvery = 10 }) {
-  const game = createGame({ seed, scenario });
+const over = (g) => g.state === 'won' || g.state === 'lost';
+
+export function runHeadless({ seed, night = 1, scenario = null, inputs = null, ticks, snapshotEvery = 10 }) {
+  const game = createGame({ seed, night, scenario });
   const frames = inputs ? inputs.frames : [];
-  const held = { move: [0, 0], cam_yaw_deg: 0, jump: false, interact: false, pulse: false, dash: false };
+  const held = { move: [0, 0], cam_yaw_deg: 0, jump: false, interact: false, pulse: false, dash: false, pause: false };
   const lines = [JSON.stringify(snapshot(game))];
   let fi = 0;
 
-  for (let k = 0; k < ticks && game.state === 'playing'; k++) {
+  for (let k = 0; k < ticks && !over(game); k++) {
     while (fi < frames.length && frames[fi].tick <= k) {
       const f = frames[fi++];
       for (const key of Object.keys(held)) if (f[key] !== undefined) held[key] = f[key];
