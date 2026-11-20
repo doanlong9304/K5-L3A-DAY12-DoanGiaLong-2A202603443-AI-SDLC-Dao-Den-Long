@@ -1,5 +1,22 @@
 # Changelog
 
+## [v1.0.0 / phase-4] — Ticket-04 "Bình minh: phát hành v1.0.0" (Contract v1.3)
+
+### Thêm
+- **Benchmark** `bench_cmd` (`node scripts/bench.js --seed 42 --duration 30 --out bench.json`): cửa sổ 1280×720, tắt vsync, cảnh bench chuẩn (200 Bóng Mực `wander`, 100 đom đóm, L1–L3 dầu 100, camera bay vòng r 30 m, cao 15 m, 15 s một vòng), khởi động 3 s, xuất `bench.json`.
+- **Soak test** `soak_cmd` (`node --expose-gc src/soak.js --seed 7 --nights 10 --out soak.json`).
+- **Bảng xếp hạng** top 10, lưu ở `data/leaderboard.json` qua server cục bộ (localStorage ở bản tĩnh). Nhập tên khi thua hoặc khi tới Bình Minh. Có màn hình từ menu. Lệnh `node scripts/play.js --export-leaderboard out.json`. Tên nhận cả tiếng Việt có dấu.
+- **Dễ tiếp cận:** đổi phím cho mọi hành động (báo trùng phím, khôi phục mặc định, được lưu); phụ đề cho Bóng Mực xuất hiện (kèm mũi tên ở mép màn hình), gió sắp thổi, 10 giây cuối, đèn dưới 30 dầu; giảm chuyển động; chữ ≥ 18 px, tùy chọn chữ lớn ×1.25.
+- `LICENSE` (MIT), `CREDITS.md`, README phát hành, retro tổng kết.
+
+### Thay đổi
+- `contract_version` là `"1.3"`, thêm `bench_cmd` và `soak_cmd`. **`run_cmd` đổi thành `node scripts/play.js`** (khởi động server có lưu bảng xếp hạng; `npm start` gọi cùng lệnh này).
+- Hiệu năng: Bóng Mực dùng chung material theo trạng thái; HUD chỉ cập nhật DOM khi giá trị đổi (`p1_low_fps` trong bench tăng từ 24 lên ~57).
+- `npm test` chạy tuần tự (`--test-concurrency=1`) để phép đo bộ nhớ của test soak không bị nhiễu bởi các test chạy song song.
+
+### Không phá vỡ tương thích
+- Mọi luật và định dạng của v1.0–v1.2 giữ nguyên. Các scenario Phase 1–3 còn hiệu lực đều đạt.
+
 ## [phase-3] — Ticket-03 "Đèn cạn dầu" (Contract v1.2)
 
 ### ⚠ Breaking changes (thay đổi phá vỡ tương thích)
@@ -25,4 +42,4 @@
 - Số liệu chuẩn, 3 bản đồ, thứ tự 12 bước, lướt, rơi, Gió Lạc, Bùa Gió, tạm dừng, chuỗi 3 Đêm, HUD, âm thanh, bảng màu. Xem [spec Phase 2](docs/spec/phase-2.md).
 
 ## [phase-1] — PRD-0 (Contract v1.0)
-- Bản đầu tiên: Đêm 1, headless theo contract v1.0.
+- Bản đầu tiên: Đêm 1 chơi được (Three.js), chế độ headless theo contract v1.0, `game.contract.json`, 24 scenario, bằng chứng tự sinh, harness (AGENTS.md, Stop hook, skill verify).
